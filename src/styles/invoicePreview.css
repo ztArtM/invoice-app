@@ -1,0 +1,54 @@
+/**
+ * Invoice preview (#invoice-preview): overflow-safe layout for screen + print/PDF-from-browser.
+ * Torture-test data: `src/constants/invoiceOverflowTestFixture.ts`
+ */
+
+#invoice-preview {
+  /* Inherited by descendants; breaks long URLs, IDs, IBANs, huge numbers */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+#invoice-preview .invoice-table-print {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#invoice-preview .invoice-table-print th,
+#invoice-preview .invoice-table-print td {
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Formatted currency / qty: prefer breaking the string over overlapping adjacent columns */
+#invoice-preview .invoice-table-print-col-num {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+@media print {
+  @page {
+    margin: 10mm 12mm;
+  }
+
+  #invoice-preview thead {
+    display: table-header-group;
+  }
+
+  /* Keep section chrome together when it fits; long content will still paginate */
+  #invoice-preview .invoice-break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #invoice-preview .invoice-table-print tbody tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #invoice-preview .invoice-table-print {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
