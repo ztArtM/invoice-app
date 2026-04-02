@@ -3,15 +3,15 @@ export const appMeta = {
   appName: 'FakturaApp',
   /**
    * Legal entity/person responsible for the service.
-   * TODO: Replace before launch.
+   * Replace before launch.
    */
   publisherName: 'Artem Barabash',
   /**
    * Support / privacy email used on Contact + Privacy pages.
-   * TODO: Replace before launch.
+   * Replace before launch.
    */
   supportEmail: 'infofakturadk@gmail.com',
-  /** Last updated / effective date shown on legal pages. TODO: Update before launch. */
+  /** Last updated / effective date shown on legal pages. Update before launch. */
   effectiveDate: '2026-04-01',
   /** This app stores drafts locally in the browser (localStorage). */
   usesLocalStorage: true,
