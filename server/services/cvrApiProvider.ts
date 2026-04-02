@@ -68,7 +68,7 @@ function buildVersion6LookupUrl(eightDigits: string): string {
   params.set('search', eightDigits)
   params.set('country', 'dk')
   params.set('format', 'json')
-  params.set('token', /*process.env.CVRAPI_TOKEN?.trim() ||*/ 'YOUR_TOKEN')
+  params.set('token', process.env.CVRAPI_TOKEN?.trim() || 'YOUR_TOKEN')
 
   const version = process.env.CVRAPI_VERSION?.trim()
   if (version) {
