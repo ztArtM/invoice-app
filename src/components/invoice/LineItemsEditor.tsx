@@ -13,7 +13,7 @@ import { formLabelClassName } from './formFieldClassNames'
  * Rest of the form keeps standard `formInputClassName` from `formFieldClassNames`.
  */
 const lineItemFieldBaseClassName =
-  'mt-1.5 h-11 w-full rounded-lg border border-zinc-200 bg-white px-0 py-0 text-center text-sm leading-[2.75rem] text-zinc-900 shadow-sm outline-none transition-[border-color,box-shadow] placeholder:text-zinc-400 hover:border-zinc-300 focus:border-blue-700 focus:ring-[3px] focus:ring-blue-700/12'
+  'mt-1.5 h-11 w-full rounded-lg border border-zinc-200 bg-white px-0 py-0 text-center text-sm leading-[2.75rem] text-zinc-900 shadow-sm outline-none transition-[border-color,box-shadow] placeholder:text-zinc-400 hover:border-zinc-300 focus:border-brand-700 focus:ring-[3px] focus:ring-brand-700/12'
 
 const lineItemTextFieldClassName = lineItemFieldBaseClassName
 

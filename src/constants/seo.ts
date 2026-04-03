@@ -27,7 +27,7 @@ export function getOgImageAbsoluteUrl(): string | null {
 
 export const seoConstants = {
   /** Theme for browser chrome; keep in sync with `theme-color` meta. */
-  themeColor: '#18181b',
+  themeColor: '#142f86',
   /** Twitter @username without @ — set via VITE_TWITTER_SITE when you have a handle. */
   twitterSite: import.meta.env.VITE_TWITTER_SITE?.trim()?.replace(/^@/, '') ?? '',
   /** Human-readable product name for structured data (uses app branding). */

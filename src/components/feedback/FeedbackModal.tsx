@@ -76,7 +76,7 @@ export function FeedbackModal({ open, onClose, embedUrl, shareUrl, t }: Feedback
                 href={shareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-blue-700 underline-offset-2 hover:underline"
+                className="text-sm font-medium text-brand-700 underline-offset-2 hover:underline"
               >
                 {t.openInNewTab}
               </a>
@@ -85,7 +85,7 @@ export function FeedbackModal({ open, onClose, embedUrl, shareUrl, t }: Feedback
               ref={closeButtonRef}
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
             >
               {t.close}
             </button>

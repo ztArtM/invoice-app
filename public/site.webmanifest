@@ -1,15 +1,15 @@
 {
-  "name": "FakturaApp",
-  "short_name": "FakturaApp",
+  "name": "FakturaLyn",
+  "short_name": "FakturaLyn",
   "description": "Create professional invoices and quotes in your browser. PDF export and drafts stored locally.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fafafa",
-  "theme_color": "#18181b",
+  "theme_color": "#142f86",
   "lang": "en",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/icon.svg",
       "type": "image/svg+xml",
       "sizes": "any",
       "purpose": "any"

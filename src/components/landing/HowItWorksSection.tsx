@@ -29,7 +29,7 @@ export function HowItWorksSection({ t }: HowItWorksSectionProps) {
           {steps.map(({ titleKey, bodyKey }, index) => (
             <li key={titleKey} className="flex gap-5 sm:gap-8">
               <div
-                className="flex size-11 shrink-0 items-center justify-center rounded-full bg-blue-800 text-sm font-bold text-white shadow-md shadow-blue-900/20"
+                className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-800 text-sm font-bold text-white shadow-md shadow-brand-950/20"
                 aria-hidden
               >
                 {index + 1}

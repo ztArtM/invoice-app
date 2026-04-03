@@ -28,7 +28,7 @@ export function FeaturesSection({ t }: FeaturesSectionProps) {
               key={titleKey}
               className="flex gap-4 rounded-xl border border-zinc-200/80 bg-white p-6 shadow-sm sm:p-7"
             >
-              <span className="mt-0.5 size-2 shrink-0 rounded-full bg-blue-800" aria-hidden />
+              <span className="mt-0.5 size-2 shrink-0 rounded-full bg-brand-800" aria-hidden />
               <div>
                 <h3 className="font-semibold text-zinc-900">{l[titleKey]}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-zinc-600">{l[bodyKey]}</p>

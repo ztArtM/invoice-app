@@ -31,7 +31,7 @@ export function AppHeader({ onBackToHome, backToHomeLabel, feedback }: AppHeader
             type="button"
             onClick={onBackToHome}
             aria-label={label}
-            className="flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-800"
+            className="flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800"
           >
             <img
               src={logoUrl}
@@ -44,11 +44,11 @@ export function AppHeader({ onBackToHome, backToHomeLabel, feedback }: AppHeader
         ) : (
           <a
             href="/"
-            className="flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-800"
+            className="flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800"
           >
             <img
               src={logoUrl}
-              alt="FakturaApp"
+              alt="FakturaLyn"
               width={200}
               height={50}
               className="h-8 w-auto max-w-full object-left object-contain sm:h-9"
@@ -62,7 +62,7 @@ export function AppHeader({ onBackToHome, backToHomeLabel, feedback }: AppHeader
               type="button"
               onClick={feedback.onClick}
               aria-label={feedback.ariaLabel}
-              className="rounded-lg border border-zinc-200/90 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="rounded-lg border border-zinc-200/90 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
             >
               {feedback.label}
             </button>
@@ -71,7 +71,7 @@ export function AppHeader({ onBackToHome, backToHomeLabel, feedback }: AppHeader
             <button
               type="button"
               onClick={onBackToHome}
-              className="rounded-md text-sm font-medium text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+              className="rounded-md text-sm font-medium text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-800"
             >
               {label}
             </button>

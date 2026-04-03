@@ -120,11 +120,11 @@ export const translations = {
       openInNewTab: 'Open in new tab',
     },
     seo: {
-      siteNameShort: 'FakturaApp',
-      defaultTitle: 'FakturaApp – Simple invoices and quotes online',
+      siteNameShort: 'FakturaLyn',
+      defaultTitle: 'FakturaLyn – Simple invoices and quotes online',
       defaultDescription:
         'Create professional invoices and quotes in your browser. Line items, VAT, PDF export—drafts stay on your device.',
-      landingTitle: 'FakturaApp – Invoices and quotes without extra complexity',
+      landingTitle: 'FakturaLyn – Invoices and quotes without extra complexity',
       landingDescription:
         'Create a professional PDF in one place. English or Danish. VAT when you need it. No accounting software.',
       privacyDescription:
@@ -452,17 +452,17 @@ export const translations = {
       openInNewTab: 'Åbn i ny fane',
     },
     seo: {
-      siteNameShort: 'FakturaApp',
-      defaultTitle: 'FakturaApp – Simple fakturaer og tilbud online',
+      siteNameShort: 'FakturaLyn',
+      defaultTitle: 'FakturaLyn – Simple fakturaer og tilbud online',
       defaultDescription:
         'Lav professionelle fakturaer og tilbud i din browser. Linjer, moms, PDF—kladder ligger på din enhed.',
-      landingTitle: 'FakturaApp – Fakturaer og tilbud uden unødig kompleksitet',
+      landingTitle: 'FakturaLyn – Fakturaer og tilbud uden unødig kompleksitet',
       landingDescription:
         'Lav en professionel PDF ét sted. Dansk eller engelsk. Moms når du har brug for det. Intet regnskabsprogram.',
       privacyDescription:
-        'Hvordan fakturakladder og feedback håndteres i denne browserbaserede fakturaapp.',
+        'Hvordan fakturakladder og feedback håndteres i FakturaLyn i browseren.',
       termsDescription: 'Servicevilkår for brug af denne faktura- og tilbudsbygger.',
-      contactDescription: 'Support og kontakt til denne fakturaapp.',
+      contactDescription: 'Support og kontakt til FakturaLyn.',
       cookiesDescription: 'Hvordan appen bruger browserlagring og cookies.',
       workspaceTitle: 'Faktura- og tilbudsbygger',
       workspaceDescription:

@@ -243,7 +243,7 @@ function App() {
       />
       <main className="relative flex-1 print:flex-none">
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_100%_100%_at_50%_-10%,rgba(59,130,246,0.07),transparent_58%)] print:hidden"
+          className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_100%_100%_at_50%_-10%,rgba(22,62,151,0.08),transparent_58%)] print:hidden"
           aria-hidden
         />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 print:mx-0 print:max-w-none print:px-6 print:pb-4 print:pt-4">

@@ -2,6 +2,18 @@
 
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  /* Brand blue (primary) — aligned with logo wordmark */
+  --color-brand-50: #f0f6ff;
+  --color-brand-100: #e0ebf7;
+  --color-brand-600: #1b54c4;
+  --color-brand-700: #174a9e;
+  --color-brand-800: #163e97;
+  --color-brand-900: #0f2d6b;
+  --color-brand-950: #0a1f4a;
+  /* Yellow — accent only */
+  --color-accent-300: #ffe066;
+  --color-accent-400: #f7c948;
+  --color-accent-500: #d9a000;
 }
 
 body {
@@ -17,7 +29,7 @@ button:focus:not(:focus-visible) {
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid rgb(37 99 235);
+  outline: 2px solid var(--color-brand-800);
   outline-offset: 2px;
 }
 

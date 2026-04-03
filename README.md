@@ -1,4 +1,4 @@
-# Invoice & quote builder
+# FakturaLyn
 
 A small **frontend-only** app for freelancers. You fill out a form on the left and see a live **invoice or quote** on the right. You can **print** it or **save a PDF**. Your work is **autosaved in the browser** (no login, no server).
 

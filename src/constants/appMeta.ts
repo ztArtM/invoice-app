@@ -1,6 +1,6 @@
 export const appMeta = {
   /** Public-facing app name (footer, legal pages). */
-  appName: 'FakturaApp',
+  appName: 'FakturaLyn',
   /**
    * Legal entity/person responsible for the service.
    * Replace before launch.

@@ -27,7 +27,7 @@ export function BenefitsSection({ t }: BenefitsSectionProps) {
               key={titleKey}
               className="rounded-2xl border border-zinc-200/80 bg-zinc-50/50 p-6 text-center shadow-sm sm:p-8"
             >
-              <span className="mx-auto flex size-10 items-center justify-center rounded-full bg-blue-800/10 text-sm font-bold text-blue-800">
+              <span className="mx-auto flex size-10 items-center justify-center rounded-full bg-brand-800/10 text-sm font-bold text-brand-800">
                 {index + 1}
               </span>
               <h3 className="mt-4 text-lg font-semibold text-zinc-900">{l[titleKey]}</h3>

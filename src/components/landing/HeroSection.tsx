@@ -14,7 +14,7 @@ export function HeroSection({ onStartApp, t }: HeroSectionProps) {
   return (
     <section className="relative border-b border-zinc-200/80 bg-gradient-to-b from-white via-zinc-50/80 to-zinc-50 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
       <div className={`${sectionShell} max-w-3xl text-center`}>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-800/90 sm:text-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-800/90 sm:text-sm">
           {l.heroKicker}
         </p>
         <h1 className="mt-4 text-balance text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">

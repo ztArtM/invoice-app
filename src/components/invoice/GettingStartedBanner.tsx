@@ -15,10 +15,10 @@ export function GettingStartedBanner({ title, tips }: GettingStartedBannerProps)
     <div
       role="status"
       aria-live="polite"
-      className="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50/90 to-sky-50/50 px-5 py-4 text-sm text-blue-950 shadow-sm shadow-blue-900/5 print:hidden"
+      className="rounded-xl border border-brand-100 bg-gradient-to-br from-brand-50/90 to-white px-5 py-4 text-sm text-brand-950 shadow-sm shadow-brand-900/5 print:hidden"
     >
-      <p className="font-semibold text-blue-900">{title}</p>
-      <ul className="mt-3 list-inside list-disc space-y-1.5 leading-relaxed text-blue-900/85">
+      <p className="font-semibold text-brand-900">{title}</p>
+      <ul className="mt-3 list-inside list-disc space-y-1.5 leading-relaxed text-brand-900/85">
         {tips.map((tip) => (
           <li key={tip}>{tip}</li>
         ))}

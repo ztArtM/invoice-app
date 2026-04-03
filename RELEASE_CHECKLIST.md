@@ -42,5 +42,5 @@
 
 - [ ] Configure static hosting to serve `index.html` for unknown paths (SPA fallback).
 - [ ] Enable gzip/brotli compression on the CDN/host if available.
-- [ ] Verify `site.webmanifest` and favicon load in production.
+- [ ] Verify `site.webmanifest` and `/icon.svg` (favicon) load in production.
 

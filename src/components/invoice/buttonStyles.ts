@@ -6,8 +6,8 @@
  * - Form add-line: dashed, distinct from toolbar
  */
 
-const focusRingBlue =
-  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800'
+const focusRingBrand =
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-800'
 
 const focusRingZinc =
   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400'
@@ -18,10 +18,10 @@ const disabledOpacity = 'disabled:pointer-events-none disabled:opacity-45'
 const buttonShell = `inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-4 text-sm transition-colors ${disabledOpacity}`
 
 /** Main call to action — solid brand blue. */
-export const primaryButtonClassName = `${buttonShell} bg-blue-800 px-4 py-2.5 font-semibold text-white shadow-sm shadow-blue-900/15 hover:bg-blue-700 active:bg-blue-900 ${focusRingBlue}`
+export const primaryButtonClassName = `${buttonShell} bg-brand-800 px-4 py-2.5 font-semibold text-white shadow-sm shadow-brand-950/15 hover:bg-brand-700 active:bg-brand-950 ${focusRingBrand}`
 
 /** Stronger emphasis for the top toolbar PDF action (full width on small screens). */
-export const toolbarPrimaryButtonClassName = `${buttonShell} w-full bg-blue-800 px-5 py-2.5 font-semibold text-white shadow-md shadow-blue-900/20 ring-1 ring-white/15 hover:bg-blue-700 active:bg-blue-900 sm:w-auto sm:px-5 ${focusRingBlue}`
+export const toolbarPrimaryButtonClassName = `${buttonShell} w-full bg-brand-800 px-5 py-2.5 font-semibold text-white shadow-md shadow-brand-950/20 ring-1 ring-white/15 hover:bg-brand-700 active:bg-brand-950 sm:w-auto sm:px-5 ${focusRingBrand}`
 
 /** Outline — Print, secondary exports. Softer label color than primary; same weight to avoid layout shift on hover. */
 export const secondaryButtonClassName = `${buttonShell} border border-zinc-200/90 bg-white py-2.5 font-medium text-zinc-500 shadow-none hover:border-zinc-300 hover:bg-white hover:text-zinc-800 active:bg-zinc-100 ${focusRingZinc}`
@@ -41,4 +41,4 @@ export const toolbarButtonClassName = secondaryButtonClassName
 export const formSecondaryButtonClassName = secondaryButtonClassName
 
 /** Full-width on small screens; dashed so it does not compete with toolbar primary. */
-export const formAddLineButtonClassName = `${buttonShell} w-full border-2 border-dashed border-zinc-300 bg-white py-2.5 font-semibold text-zinc-700 shadow-sm hover:border-blue-500 hover:bg-blue-50/60 hover:text-blue-900 sm:w-auto ${focusRingBlue}`
+export const formAddLineButtonClassName = `${buttonShell} w-full border-2 border-dashed border-zinc-300 bg-white py-2.5 font-semibold text-zinc-700 shadow-sm hover:border-accent-500 hover:bg-accent-400/10 hover:text-brand-900 sm:w-auto ${focusRingBrand}`

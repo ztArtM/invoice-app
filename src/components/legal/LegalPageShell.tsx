@@ -19,7 +19,7 @@ export function LegalPageShell({ t, title, subtitle, children, onBack }: LegalPa
           <button
             type="button"
             onClick={onBack}
-            className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+            className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-800"
           >
             {t.legal.back}
           </button>
@@ -36,7 +36,7 @@ export function LegalPageShell({ t, title, subtitle, children, onBack }: LegalPa
           </p>
         </header>
 
-        <article className="prose prose-zinc max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-blue-800 prose-a:underline-offset-4">
+        <article className="prose prose-zinc max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-brand-800 prose-a:underline-offset-4">
           {children}
         </article>
       </main>

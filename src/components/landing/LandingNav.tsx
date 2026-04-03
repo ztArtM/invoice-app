@@ -18,11 +18,11 @@ export function LandingNav({ language, onLanguageChange, onStartApp, t }: Landin
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[3.75rem] sm:px-6">
         <a
           href="#top"
-          className="flex shrink-0 items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-800"
+          className="flex shrink-0 items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800"
         >
           <img
             src={logoUrl}
-            alt="FakturaApp"
+            alt="FakturaLyn"
             width={200}
             height={50}
             decoding="async"
