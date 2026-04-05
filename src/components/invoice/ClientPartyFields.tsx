@@ -152,7 +152,6 @@ export function ClientPartyFields({ t, invoiceDocument, setInvoiceDocument }: Cl
           onCvrDigitsChange={handleClientCvrDigitsChange}
           onLookupSuccess={handleLookupSuccess}
           idPrefix="client"
-          hintText={fm.clientCvrHint}
         />
       ) : null}
 

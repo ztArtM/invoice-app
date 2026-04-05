@@ -1,4 +1,4 @@
-import type { ChangeEvent, FocusEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { createEmptyLineItem } from '../../constants/defaultInvoiceDocument'
 import type { SupportedCurrencyCode } from '../../constants/localization'
 import type { TranslationMessages } from '../../constants/translations'
@@ -79,13 +79,7 @@ function parsePositiveNumber(rawValue: string): number {
   return parsed
 }
 
-/** When the field shows 0, select all on focus so typing replaces it. */
-function selectAllIfZero(event: FocusEvent<HTMLInputElement>) {
-  const raw = event.target.value.trim()
-  if (raw === '' || raw === '0' || Number.parseFloat(raw) === 0) {
-    event.target.select()
-  }
-}
+type LineNumericDrafts = Record<string, { quantity?: string; unitPrice?: string }>
 
 export function LineItemsEditor({
   t,
@@ -95,6 +89,7 @@ export function LineItemsEditor({
   setInvoiceDocument,
 }: LineItemsEditorProps) {
   const li = t.lineItems
+  const [lineNumericDrafts, setLineNumericDrafts] = useState<LineNumericDrafts>({})
 
   const updateLineItemById = (
     lineItemId: string,
@@ -113,15 +108,73 @@ export function LineItemsEditor({
       updateLineItemById(lineItemId, { description: event.target.value })
     }
 
+  const handleLineQuantityFocus = (lineItemId: string, currentQuantity: number) => () => {
+    setLineNumericDrafts((prev) => ({
+      ...prev,
+      [lineItemId]: {
+        ...prev[lineItemId],
+        quantity: currentQuantity === 0 ? '' : String(currentQuantity),
+      },
+    }))
+  }
+
   const handleLineQuantityChange =
     (lineItemId: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      updateLineItemById(lineItemId, { quantity: parsePositiveNumber(event.target.value) })
+      const raw = event.target.value
+      setLineNumericDrafts((prev) => ({
+        ...prev,
+        [lineItemId]: { ...prev[lineItemId], quantity: raw },
+      }))
+      updateLineItemById(lineItemId, { quantity: parsePositiveNumber(raw) })
     }
+
+  const handleLineQuantityBlur = (lineItemId: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value.trim()
+    const quantity = raw === '' ? 0 : parsePositiveNumber(raw)
+    updateLineItemById(lineItemId, { quantity })
+    setLineNumericDrafts((prev) => {
+      const next = { ...prev }
+      const row = { ...next[lineItemId] }
+      delete row.quantity
+      if (Object.keys(row).length === 0) delete next[lineItemId]
+      else next[lineItemId] = row
+      return next
+    })
+  }
+
+  const handleLineUnitPriceFocus = (lineItemId: string, currentUnitPrice: number) => () => {
+    setLineNumericDrafts((prev) => ({
+      ...prev,
+      [lineItemId]: {
+        ...prev[lineItemId],
+        unitPrice: currentUnitPrice === 0 ? '' : String(currentUnitPrice),
+      },
+    }))
+  }
 
   const handleLineUnitPriceChange =
     (lineItemId: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      updateLineItemById(lineItemId, { unitPrice: parsePositiveNumber(event.target.value) })
+      const raw = event.target.value
+      setLineNumericDrafts((prev) => ({
+        ...prev,
+        [lineItemId]: { ...prev[lineItemId], unitPrice: raw },
+      }))
+      updateLineItemById(lineItemId, { unitPrice: parsePositiveNumber(raw) })
     }
+
+  const handleLineUnitPriceBlur = (lineItemId: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value.trim()
+    const unitPrice = raw === '' ? 0 : parsePositiveNumber(raw)
+    updateLineItemById(lineItemId, { unitPrice })
+    setLineNumericDrafts((prev) => {
+      const next = { ...prev }
+      const row = { ...next[lineItemId] }
+      delete row.unitPrice
+      if (Object.keys(row).length === 0) delete next[lineItemId]
+      else next[lineItemId] = row
+      return next
+    })
+  }
 
   const handleAddLineItemClick = () => {
     const newLineItem = createEmptyLineItem()
@@ -149,6 +202,10 @@ export function LineItemsEditor({
     <section aria-label={li.sectionAriaLabel} className="space-y-4">
       <div className="space-y-4">
         {invoiceDocument.lineItems.map((lineItem, index) => {
+          const drafts = lineNumericDrafts[lineItem.id]
+          const quantityDisplay = drafts?.quantity !== undefined ? drafts.quantity : String(lineItem.quantity)
+          const unitPriceDisplay =
+            drafts?.unitPrice !== undefined ? drafts.unitPrice : String(lineItem.unitPrice)
           const lineTotal = calculateLineItemTotal(lineItem)
           const removeButtonTitle = canRemoveRows ? li.removeTitle : li.removeDisabledTitle
           const rowLabel = li.rowLabel.replace('{{n}}', String(index + 1))
@@ -199,9 +256,10 @@ export function LineItemsEditor({
                       min={0}
                       step={1}
                       className={lineItemQtyFieldClassName}
-                      value={lineItem.quantity}
+                      value={quantityDisplay}
                       onChange={handleLineQuantityChange(lineItem.id)}
-                      onFocus={selectAllIfZero}
+                      onFocus={handleLineQuantityFocus(lineItem.id, lineItem.quantity)}
+                      onBlur={handleLineQuantityBlur(lineItem.id)}
                     />
                   </div>
                   <div className="min-w-0">
@@ -215,9 +273,10 @@ export function LineItemsEditor({
                       step={0.01}
                       inputMode="decimal"
                       className={lineItemUnitPriceFieldClassName}
-                      value={lineItem.unitPrice}
+                      value={unitPriceDisplay}
                       onChange={handleLineUnitPriceChange(lineItem.id)}
-                      onFocus={selectAllIfZero}
+                      onFocus={handleLineUnitPriceFocus(lineItem.id, lineItem.unitPrice)}
+                      onBlur={handleLineUnitPriceBlur(lineItem.id)}
                     />
                   </div>
                   <div className="min-w-0">

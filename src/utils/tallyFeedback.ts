@@ -10,6 +10,10 @@ const TALLY_SHARE_BASE = 'https://tally.so/r'
 const DEFAULT_TALLY_FEEDBACK_FORM_EN = 'XxY4d4'
 const DEFAULT_TALLY_FEEDBACK_FORM_DA = 'ODY7qK'
 
+/** Shown after “Save as PDF” (header Feedback uses general forms above). */
+const PDF_DOWNLOAD_TALLY_FORM_EN = 'ODYy1g'
+const PDF_DOWNLOAD_TALLY_FORM_DA = '818515'
+
 /**
  * Extracts the Tally form id from a full URL (`.../r/xyz`, `.../embed/xyz`) or returns a bare id.
  * Returns `null` if the value cannot be parsed.
@@ -89,5 +93,21 @@ export function buildTallyFeedbackEmbedUrl(lang: Language, invoice: InvoiceDocum
 export function buildTallyFeedbackShareUrl(lang: Language, invoice: InvoiceDocument): string | null {
   const id = getTallyFormIdForLanguage(lang)
   if (!id) return null
+  return appendFeedbackParams(`${TALLY_SHARE_BASE}/${encodeURIComponent(id)}`, invoice, lang)
+}
+
+function getTallyPdfDownloadFormIdForLanguage(lang: Language): string {
+  return lang === 'da' ? PDF_DOWNLOAD_TALLY_FORM_DA : PDF_DOWNLOAD_TALLY_FORM_EN
+}
+
+/** Post–PDF-download survey (embed). */
+export function buildTallyPdfDownloadEmbedUrl(lang: Language, invoice: InvoiceDocument): string {
+  const id = getTallyPdfDownloadFormIdForLanguage(lang)
+  return appendFeedbackParams(`${TALLY_EMBED_BASE}/${encodeURIComponent(id)}`, invoice, lang)
+}
+
+/** Post–PDF-download survey (share / new tab). */
+export function buildTallyPdfDownloadShareUrl(lang: Language, invoice: InvoiceDocument): string {
+  const id = getTallyPdfDownloadFormIdForLanguage(lang)
   return appendFeedbackParams(`${TALLY_SHARE_BASE}/${encodeURIComponent(id)}`, invoice, lang)
 }

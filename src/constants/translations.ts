@@ -118,6 +118,11 @@ export const translations = {
       notConfigured:
         'The feedback form is not configured. Set VITE_TALLY_FEEDBACK_FORM_EN (and optionally VITE_TALLY_FEEDBACK_FORM_DA) in your environment.',
       openInNewTab: 'Open in new tab',
+      pdfSurveyRegionAria: 'PDF export feedback',
+      pdfSurveyBannerBody:
+        'First finish saving your PDF in the dialog above. Then, if you like, open a quick feedback form—it opens in a new tab.',
+      pdfSurveyOpenForm: 'Open feedback form',
+      pdfSurveyDismiss: 'Not now',
     },
     seo: {
       siteNameShort: 'FakturaLyn',
@@ -184,6 +189,8 @@ export const translations = {
       saveAsPdf: 'Save as PDF',
       print: 'Print',
       printHint: 'Print → “Save as PDF” works in most browsers.',
+      printHintDesktopFeedback:
+        'After a successful PDF download, an optional feedback form may open in this tab.',
       exportAriaLabel: 'Export options',
       previewHint: 'Preview updates as you type. Add details to fill in the document.',
       languageLabel: 'Language',
@@ -238,7 +245,7 @@ export const translations = {
       referenceAndDates: 'Reference & dates',
       referenceAndDatesDescription: 'Number and dates shown on the document and in your records.',
       taxSection: 'VAT',
-      taxSectionDescription: 'Set VAT to 0% if it does not apply.',
+      taxSectionDescription: 'Set VAT to 0% if it does not apply. Value from 0 to 100.',
       taxNoteReverseCharge: 'Reverse charge – VAT not charged',
       taxNoteExportOutsideScope: 'Export / outside scope – VAT not charged',
       bankTransferTitle: 'Bank transfer',
@@ -253,7 +260,6 @@ export const translations = {
       validUntil: 'Valid until',
       currency: 'Currency',
       vatRate: 'VAT rate (%)',
-      vatRateHint: 'Use 0 if you do not charge VAT. Values are kept between 0 and 100.',
       paymentDetails: 'Payment details',
       bankName: 'Bank name',
       registrationNumber: 'Registration number',
@@ -450,6 +456,11 @@ export const translations = {
       notConfigured:
         'Feedbackformularen er ikke konfigureret. Angiv VITE_TALLY_FEEDBACK_FORM_EN (og valgfrit VITE_TALLY_FEEDBACK_FORM_DA) i dit miljø.',
       openInNewTab: 'Åbn i ny fane',
+      pdfSurveyRegionAria: 'Feedback efter PDF',
+      pdfSurveyBannerBody:
+        'Afslut først at gemme PDF’en i dialogen ovenfor. Bagefter kan du valgfrit åbne et kort feedbackskema—i ny fane.',
+      pdfSurveyOpenForm: 'Åbn feedbackskema',
+      pdfSurveyDismiss: 'Ikke nu',
     },
     seo: {
       siteNameShort: 'FakturaLyn',
@@ -516,6 +527,8 @@ export const translations = {
       saveAsPdf: 'Gem som PDF',
       print: 'Udskriv',
       printHint: 'Udskriv → „Gem som PDF“ virker i de fleste browsere.',
+      printHintDesktopFeedback:
+        'Efter en lykkedes PDF-download kan et valgfrit feedbackskema åbne i denne fane.',
       exportAriaLabel: 'Eksportmuligheder',
       previewHint:
         'Forhåndsvisningen opdateres mens du skriver. Udfyld felter for at færdiggøre dokumentet.',
@@ -574,7 +587,7 @@ export const translations = {
       referenceAndDates: 'Reference og datoer',
       referenceAndDatesDescription: 'Nummer og datoer, der vises på dokumentet og i dine arkiver.',
       taxSection: 'Moms',
-      taxSectionDescription: 'Sæt moms til 0 %, hvis den ikke gælder.',
+      taxSectionDescription: 'Sæt moms til 0 %, hvis den ikke gælder. Værdi mellem 0 og 100.',
       taxNoteReverseCharge: 'Omvendt betalingspligt – moms ikke opkrævet',
       taxNoteExportOutsideScope: 'Eksport / uden for EU-moms – moms ikke opkrævet',
       bankTransferTitle: 'Bankoverførsel',
@@ -589,7 +602,6 @@ export const translations = {
       validUntil: 'Gyldig til',
       currency: 'Valuta',
       vatRate: 'Moms-sats (%)',
-      vatRateHint: 'Brug 0 hvis du ikke opkræver moms. Værdier holdes mellem 0 og 100.',
       paymentDetails: 'Betalingsoplysninger',
       bankName: 'Bank',
       registrationNumber: 'Registreringsnummer',

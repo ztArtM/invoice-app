@@ -1,4 +1,4 @@
-import { useEffect, type ChangeEvent } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import {
   defaultSymbolForCurrencyCode,
   SUPPORTED_CURRENCY_CODES,
@@ -43,6 +43,9 @@ export function InvoiceForm({
   invoiceDocument,
   setInvoiceDocument,
 }: InvoiceFormProps) {
+  /** While focused, allow empty input; blur commits empty → 0. */
+  const [vatRateDraft, setVatRateDraft] = useState<string | undefined>(undefined)
+
   const showInternationalBankDetails =
     invoiceDocument.paymentDetails.iban.trim() !== '' ||
     invoiceDocument.paymentDetails.bicOrSwift.trim() !== ''
@@ -139,8 +142,15 @@ export function InvoiceForm({
     setInvoiceDocument((previous) => ({ ...previous, mobilePayNumberOrBox: event.target.value }))
   }
 
+  const handleVatRatePercentFocus = () => {
+    const r = invoiceDocument.vat.ratePercent
+    setVatRateDraft(r === 0 ? '' : String(r))
+  }
+
   const handleVatRatePercentChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const parsed = parseFloat(event.target.value)
+    const raw = event.target.value
+    setVatRateDraft(raw)
+    const parsed = parseFloat(raw)
     const safePercent = Number.isFinite(parsed) ? Math.min(100, Math.max(0, parsed)) : 0
     setInvoiceDocument((previous) => ({
       ...previous,
@@ -149,6 +159,20 @@ export function InvoiceForm({
         ratePercent: safePercent,
       },
     }))
+  }
+
+  const handleVatRatePercentBlur = (event: ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value.trim()
+    const parsed = parseFloat(raw)
+    const safePercent = Number.isFinite(parsed) ? Math.min(100, Math.max(0, parsed)) : 0
+    setInvoiceDocument((previous) => ({
+      ...previous,
+      vat: {
+        ...previous.vat,
+        ratePercent: safePercent,
+      },
+    }))
+    setVatRateDraft(undefined)
   }
 
   const handlePaymentFieldChange =
@@ -265,23 +289,27 @@ export function InvoiceForm({
         </div>
       </FormSection>
 
-      <FormSection title={t.form.taxSection} description={t.form.taxSectionDescription}>
-        <div>
-          <FormTextField
+      <FormSection title={t.form.vatRate} compact>
+        <div className="max-w-[6rem]">
+          <label htmlFor="vat-rate" className="sr-only">
+            {t.form.vatRate}
+          </label>
+          <input
             id="vat-rate"
-            label={t.form.vatRate}
             type="number"
             min={0}
             max={100}
             step={0.01}
-            value={invoiceDocument.vat.ratePercent}
+            className={`${formInputClassName} tabular-nums`}
+            value={vatRateDraft !== undefined ? vatRateDraft : String(invoiceDocument.vat.ratePercent)}
             onChange={handleVatRatePercentChange}
-            aria-describedby="vat-rate-hint"
+            onFocus={handleVatRatePercentFocus}
+            onBlur={handleVatRatePercentBlur}
           />
-          <p id="vat-rate-hint" className="mt-2 text-xs leading-relaxed text-zinc-500">
-            {t.form.vatRateHint}
-          </p>
         </div>
+        <p className="text-xs leading-normal text-zinc-600 whitespace-nowrap overflow-x-auto [scrollbar-width:thin]">
+          {t.form.taxSectionDescription}
+        </p>
       </FormSection>
 
       <FormSection  title={t.lineItems.heading} description={t.lineItems.hint}>

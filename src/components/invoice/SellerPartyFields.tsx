@@ -61,7 +61,6 @@ export function SellerPartyFields({ t, invoiceDocument, setInvoiceDocument }: Se
         onCvrDigitsChange={handleSellerCvrDigitsChange}
         onLookupSuccess={handleLookupSuccess}
         idPrefix="seller"
-        hintText={fm.sellerCvrHint}
       />
       <FormTextField
         id="seller-name"

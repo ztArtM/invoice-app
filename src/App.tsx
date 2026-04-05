@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AppHeader } from './components/AppHeader'
 import { FeedbackModal } from './components/feedback/FeedbackModal'
+import { PdfSurveyMobileBanner } from './components/feedback/PdfSurveyMobileBanner'
 import { LandingPage } from './components/landing/LandingPage'
 import { InvoiceWorkspace } from './components/invoice/InvoiceWorkspace'
 import { createDefaultInvoiceDocument } from './constants/defaultInvoiceDocument'
@@ -15,7 +16,12 @@ import {
   loadInvoiceDraftFromLocalStorage,
   saveInvoiceDraftToLocalStorage,
 } from './utils/invoiceDraftStorage'
-import { buildTallyFeedbackEmbedUrl, buildTallyFeedbackShareUrl } from './utils/tallyFeedback'
+import {
+  buildTallyFeedbackEmbedUrl,
+  buildTallyFeedbackShareUrl,
+  buildTallyPdfDownloadEmbedUrl,
+  buildTallyPdfDownloadShareUrl,
+} from './utils/tallyFeedback'
 import { getInfoRouteFromHash, setInfoRouteHash, type InfoRoute } from './utils/infoRoutes'
 import { LegalPageShell } from './components/legal/LegalPageShell'
 import { ContactContent, CookiesContent, PrivacyPolicyContent, TermsContent } from './components/legal/LegalPages'
@@ -26,6 +32,17 @@ import { INVOICE_DRAFT_STORAGE_KEY } from './constants/storageKeys'
 const SAVE_DEBOUNCE_MS = 400
 
 const APP_PHASE_STORAGE_KEY = 'invoice_app_phase'
+
+/** ~1s after PDF save so the browser can finish the download before the modal opens. */
+const PDF_SURVEY_DESKTOP_DEFER_MS = 900
+
+function prefersPdfSurveyMobileUi(): boolean {
+  if (typeof window === 'undefined') return false
+  return (
+    window.matchMedia('(max-width: 640px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches
+  )
+}
 
 function readInitialAppPhase(): 'landing' | 'app' {
   try {
@@ -57,6 +74,8 @@ function App() {
   }
 
   const goToLanding = () => {
+    clearPendingPdfSurveyDesktopModal()
+    setPdfSurveyBannerShareUrl(null)
     try {
       sessionStorage.removeItem(APP_PHASE_STORAGE_KEY)
     } catch {
@@ -82,9 +101,20 @@ function App() {
     embed: string | null
     share: string | null
   } | null>(null)
+  const [pdfSurveyBannerShareUrl, setPdfSurveyBannerShareUrl] = useState<string | null>(null)
+  const pdfSurveyDesktopTimeoutRef = useRef<number | null>(null)
   const activeCurrencyCode = normalizeToSupportedCurrencyCode(invoiceDocument.currency.code)
 
+  const clearPendingPdfSurveyDesktopModal = () => {
+    if (pdfSurveyDesktopTimeoutRef.current !== null) {
+      window.clearTimeout(pdfSurveyDesktopTimeoutRef.current)
+      pdfSurveyDesktopTimeoutRef.current = null
+    }
+  }
+
   const openFeedback = () => {
+    clearPendingPdfSurveyDesktopModal()
+    setPdfSurveyBannerShareUrl(null)
     setFeedbackUrls({
       embed: buildTallyFeedbackEmbedUrl(language, invoiceDocument),
       share: buildTallyFeedbackShareUrl(language, invoiceDocument),
@@ -92,14 +122,54 @@ function App() {
     setFeedbackOpen(true)
   }
 
+  const openPdfDownloadFeedback = () => {
+    clearPendingPdfSurveyDesktopModal()
+    const shareUrl = buildTallyPdfDownloadShareUrl(language, invoiceDocument)
+    const embedUrl = buildTallyPdfDownloadEmbedUrl(language, invoiceDocument)
+
+    // Mobile / touch: two steps — finish the system “save PDF” flow first; user opens Tally from the banner (reliable tap).
+    if (prefersPdfSurveyMobileUi()) {
+      setPdfSurveyBannerShareUrl(shareUrl)
+      return
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const timeoutId = window.setTimeout(() => {
+          pdfSurveyDesktopTimeoutRef.current = null
+          setFeedbackUrls({ embed: embedUrl, share: shareUrl })
+          setFeedbackOpen(true)
+        }, PDF_SURVEY_DESKTOP_DEFER_MS)
+        pdfSurveyDesktopTimeoutRef.current = timeoutId
+      })
+    })
+  }
+
   const closeFeedback = () => {
     setFeedbackOpen(false)
     setFeedbackUrls(null)
   }
 
+  const dismissPdfSurveyBanner = () => {
+    setPdfSurveyBannerShareUrl(null)
+  }
+
   useEffect(() => {
     document.documentElement.lang = language
   }, [language])
+
+  useEffect(() => {
+    setPdfSurveyBannerShareUrl(null)
+  }, [language])
+
+  useEffect(() => {
+    return () => {
+      if (pdfSurveyDesktopTimeoutRef.current !== null) {
+        window.clearTimeout(pdfSurveyDesktopTimeoutRef.current)
+        pdfSurveyDesktopTimeoutRef.current = null
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const onHashChange = () => setInfoRoute(getInfoRouteFromHash(window.location.hash))
@@ -241,6 +311,18 @@ function App() {
         shareUrl={feedbackUrls?.share ?? null}
         t={t.feedback}
       />
+      {pdfSurveyBannerShareUrl ? (
+        <PdfSurveyMobileBanner
+          shareUrl={pdfSurveyBannerShareUrl}
+          onDismiss={dismissPdfSurveyBanner}
+          t={{
+            regionAriaLabel: t.feedback.pdfSurveyRegionAria,
+            body: t.feedback.pdfSurveyBannerBody,
+            openForm: t.feedback.pdfSurveyOpenForm,
+            dismiss: t.feedback.pdfSurveyDismiss,
+          }}
+        />
+      ) : null}
       <main className="relative flex-1 print:flex-none">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_100%_100%_at_50%_-10%,rgba(22,62,151,0.08),transparent_58%)] print:hidden"
@@ -253,7 +335,7 @@ function App() {
             localeForFormatting={localeForFormatting}
             activeCurrencyCode={activeCurrencyCode}
             t={t}
-            onFeedbackClick={openFeedback}
+            onFeedbackClick={openPdfDownloadFeedback}
             invoiceDocument={invoiceDocument}
             setInvoiceDocument={setInvoiceDocument}
           />

@@ -56,12 +56,11 @@ export function InvoiceWorkspace({
     setPdfErrorMessage(null)
     try {
       exportInvoiceToPdf(invoiceDocument, t, localeForFormatting, activeCurrencyCode)
+      onFeedbackClick?.()
     } catch (error) {
       const message =
         error instanceof Error ? error.message : t.workspace.pdfErrorGeneric
       setPdfErrorMessage(message)
-    } finally {
-      onFeedbackClick?.()
     }
   }
 
@@ -153,7 +152,8 @@ export function InvoiceWorkspace({
           </div>
 
           <p className="mt-5 border-t border-zinc-100 pt-4 text-xs leading-relaxed text-zinc-400 sm:text-right">
-            {t.workspace.printHint}
+            {t.workspace.printHint}{' '}
+            <span className="hidden sm:inline">{t.workspace.printHintDesktopFeedback}</span>
           </p>
         </div>
       </header>

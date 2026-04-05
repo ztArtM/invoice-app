@@ -39,9 +39,8 @@ export interface CompanyCvrLookupProps {
   onCvrDigitsChange: (digits: string) => void
   /** Merges lookup result into the party (name, address, CVR). */
   onLookupSuccess: (fields: { name: string; address: string; cvrNumber: string }) => void
-  /** Used for stable `id` / `aria-describedby`, e.g. `client` → `client-cvr`. */
+  /** Used for stable `id`, e.g. `client` → `client-cvr`. */
   idPrefix: 'client' | 'seller'
-  hintText: string
 }
 
 export function CompanyCvrLookup({
@@ -50,13 +49,11 @@ export function CompanyCvrLookup({
   onCvrDigitsChange,
   onLookupSuccess,
   idPrefix,
-  hintText,
 }: CompanyCvrLookupProps) {
   const [lookupState, setLookupState] = useState<LookupUiState>('idle')
   const [lookupMessage, setLookupMessage] = useState('')
 
   const inputId = `${idPrefix}-cvr`
-  const hintId = `${idPrefix}-cvr-hint`
 
   const resetFeedback = () => {
     setLookupState('idle')
@@ -122,11 +119,9 @@ export function CompanyCvrLookup({
           inputMode="numeric"
           autoComplete="off"
           maxLength={8}
-          placeholder="12345678"
           className={`${formInputClassName} flex-1 tabular-nums`}
           value={cvrNumber}
           onChange={handleCvrChange}
-          aria-describedby={hintId}
           aria-invalid={lookupState === 'error'}
         />
         <button
@@ -146,9 +141,6 @@ export function CompanyCvrLookup({
           )}
         </button>
       </div>
-      <p id={hintId} className="mt-2 text-xs leading-relaxed text-zinc-500">
-        {hintText}
-      </p>
       {showSuccess ? (
         <p className="mt-2 text-sm text-emerald-800" role="status" aria-live="polite">
           {lookupMessage}
