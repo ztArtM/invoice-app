@@ -9,10 +9,10 @@ import { getGettingStartedTips } from '../../utils/gettingStartedTips'
 import { printInvoicePreview } from '../../utils/printDocument'
 import {
   secondaryButtonClassName,
-  tertiaryButtonClassName,
   toolbarExportGroupClassName,
   toolbarPrimaryButtonClassName,
 } from './buttonStyles'
+import { DownloadPdfIcon, PrintIcon } from './ToolbarExportIcons'
 import { toolbarSelectClassName } from './formFieldClassNames'
 import { GettingStartedBanner } from './GettingStartedBanner'
 import { InvoiceEditor } from './InvoiceEditor'
@@ -115,14 +115,14 @@ export function InvoiceWorkspace({
               >
                 <button
                   type="button"
-                  className={tertiaryButtonClassName}
+                  className={secondaryButtonClassName}
                   onClick={handleDuplicateClick}
                 >
                   {t.workspace.duplicateDocument}
                 </button>
                 <button
                   type="button"
-                  className={tertiaryButtonClassName}
+                  className={secondaryButtonClassName}
                   onClick={handleResetClick}
                 >
                   {t.workspace.resetDraft}
@@ -130,25 +130,12 @@ export function InvoiceWorkspace({
               </div>
             </div>
 
-            <div className={toolbarExportGroupClassName}>
-              <button
-                type="button"
-                className={`group ${secondaryButtonClassName} order-2 w-full bg-white/90 sm:order-1 sm:w-auto`}
-                onClick={printInvoicePreview}
-              >
-                <PrintIcon />
-                {t.workspace.print}
-              </button>
-              <button
-                type="button"
-                className={`${toolbarPrimaryButtonClassName} order-1 w-full sm:order-3 sm:w-auto`}
-                onClick={handleDownloadPdfClick}
-                aria-describedby={pdfErrorMessage ? 'pdf-export-error' : undefined}
-              >
-                <DownloadPdfIcon />
-                {t.workspace.saveAsPdf}
-              </button>
-            </div>
+            <WorkspaceToolbarExportButtons
+              t={t}
+              onPrint={printInvoicePreview}
+              onDownloadPdf={handleDownloadPdfClick}
+              pdfAriaDescribedBy={pdfErrorMessage ? 'pdf-export-error' : undefined}
+            />
           </div>
 
           <p className="mt-5 border-t border-zinc-100 pt-4 text-xs leading-relaxed text-zinc-400 sm:text-right">
@@ -206,46 +193,54 @@ export function InvoiceWorkspace({
             activeCurrencyCode={activeCurrencyCode}
             invoiceDocument={invoiceDocument}
           />
+          <div
+            className="mt-6 rounded-xl border border-zinc-200/80 bg-white p-4 shadow-sm shadow-zinc-900/[0.04] ring-1 ring-zinc-950/[0.02] lg:hidden print:hidden"
+            role="group"
+            aria-label={`${t.workspace.print} / ${t.workspace.saveAsPdf}`}
+          >
+            <WorkspaceToolbarExportButtons
+              t={t}
+              onPrint={printInvoicePreview}
+              onDownloadPdf={handleDownloadPdfClick}
+              pdfAriaDescribedBy={pdfErrorMessage ? 'pdf-export-error' : undefined}
+            />
+          </div>
         </div>
       </main>
     </div>
   )
 }
 
-function DownloadPdfIcon() {
+function WorkspaceToolbarExportButtons({
+  t,
+  onPrint,
+  onDownloadPdf,
+  pdfAriaDescribedBy,
+}: {
+  t: TranslationMessages
+  onPrint: () => void
+  onDownloadPdf: () => void
+  pdfAriaDescribedBy?: string
+}) {
   return (
-    <svg
-      className="size-4 shrink-0 opacity-95"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  )
-}
-
-function PrintIcon() {
-  return (
-    <svg
-      className="size-4 shrink-0 text-zinc-400 transition-colors group-hover:text-zinc-600"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M6 9V2h12v7" />
-      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-      <rect width="12" height="8" x="6" y="14" rx="1" />
-    </svg>
+    <div className={toolbarExportGroupClassName}>
+      <button
+        type="button"
+        className={`group ${secondaryButtonClassName} order-2 w-full bg-white/90 sm:order-1 sm:w-auto`}
+        onClick={onPrint}
+      >
+        <PrintIcon />
+        {t.workspace.print}
+      </button>
+      <button
+        type="button"
+        className={`${toolbarPrimaryButtonClassName} order-1 w-full sm:order-3 sm:w-auto`}
+        onClick={onDownloadPdf}
+        aria-describedby={pdfAriaDescribedBy}
+      >
+        <DownloadPdfIcon />
+        {t.workspace.saveAsPdf}
+      </button>
+    </div>
   )
 }

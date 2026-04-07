@@ -25,7 +25,7 @@ import { FormTextArea } from './FormTextArea'
 import { FormTextField } from './FormTextField'
 import { LineItemsEditor } from './LineItemsEditor'
 import { SellerPartyFields } from './SellerPartyFields'
-import { tertiaryButtonClassName } from './buttonStyles'
+import { secondaryButtonClassName } from './buttonStyles'
 import { TotalsSummary } from './TotalsSummary'
 
 interface InvoiceFormProps {
@@ -366,7 +366,6 @@ export function InvoiceForm({
               inputMode="numeric"
               autoComplete="off"
               maxLength={4}
-              placeholder="1234"
               className="tabular-nums max-w-20"
               value={invoiceDocument.paymentDetails.registrationNumber}
               onChange={handleRegistrationNumberChange}
@@ -380,7 +379,6 @@ export function InvoiceForm({
               inputMode="numeric"
               autoComplete="off"
               maxLength={10}
-              placeholder="1234567890"
               className="tabular-nums"
               value={invoiceDocument.paymentDetails.accountNumber}
               onChange={handleAccountNumberChange}
@@ -398,7 +396,7 @@ export function InvoiceForm({
               open={showInternationalBankDetails || undefined}
             >
               <summary
-                className={`${tertiaryButtonClassName} -ml-1 inline-flex cursor-pointer items-center justify-start list-none [&::-webkit-details-marker]:hidden [&::marker]:hidden`}
+                className={`${secondaryButtonClassName} -ml-1 inline-flex w-full cursor-pointer items-center justify-start text-left list-none sm:w-auto [&::-webkit-details-marker]:hidden [&::marker]:hidden`}
                 aria-controls="international-bank-fields"
                 aria-expanded={showInternationalBankDetails}
               >
