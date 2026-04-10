@@ -1,18 +1,16 @@
 /**
  * Local dev API: `POST /api/company-lookup` → CVRAPI (via `findCompanyByCvrNumber`).
  * Run: npm run dev:api  (port 8787; Vite proxies `/api` here.)
+ * Production: same route is served by `api/company-lookup.ts` on Vercel.
  */
 
 import http from 'node:http'
-import { findCompanyByCvrNumber } from '../services/companyLookupService.js'
+import {
+  parseJsonBodyToPayload,
+  runCompanyLookupFromPayload,
+} from '../lib/companyLookupPostHandler.js'
 
-const PORT = Number(process.env.CVR_DEV_API_PORT || 8787, 10)
-
-function normaliseCvrDigits(raw: unknown): string {
-  return String(raw ?? '')
-    .replace(/\D/g, '')
-    .slice(0, 8)
-}
+const PORT = parseInt(process.env.CVR_DEV_API_PORT ?? '8787', 10)
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -37,47 +35,21 @@ const server = http.createServer(async (req, res) => {
     if (body.length > 4096) break
   }
 
-  let payload: unknown
-  try {
-    payload = JSON.parse(body || '{}')
-  } catch {
+  const parsed = parseJsonBodyToPayload(body, 4096)
+  if (!parsed.ok) {
+    if (parsed.reason === 'too_large') {
+      res.writeHead(413, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: 'payload_too_large', message: 'Request body too large.' }))
+      return
+    }
     res.writeHead(400, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ error: 'bad_request', message: 'Invalid JSON body.' }))
     return
   }
 
-  const record = payload as { cvr?: unknown }
-  const digits = normaliseCvrDigits(record.cvr)
-  if (digits.length !== 8) {
-    res.writeHead(400, { 'Content-Type': 'application/json' })
-    res.end(
-      JSON.stringify({
-        error: 'invalid_cvr',
-        message: 'CVR must be exactly 8 digits.',
-      }),
-    )
-    return
-  }
-
-  try {
-    const company = await findCompanyByCvrNumber(digits)
-    if (!company) {
-      res.writeHead(404, { 'Content-Type': 'application/json' })
-      res.end(
-        JSON.stringify({
-          error: 'not_found',
-          message: 'No company found for this CVR.',
-        }),
-      )
-      return
-    }
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify(company))
-  } catch (err) {
-    console.error('[company-lookup]', err)
-    res.writeHead(500, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ error: 'server_error', message: 'Lookup failed.' }))
-  }
+  const result = await runCompanyLookupFromPayload(parsed.payload)
+  res.writeHead(result.status, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify(result.body))
 })
 
 server.on('error', (err: NodeJS.ErrnoException) => {

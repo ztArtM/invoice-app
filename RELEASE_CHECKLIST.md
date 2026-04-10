@@ -17,6 +17,7 @@
 - [ ] (Optional) Configure Tally:
   - [ ] `VITE_TALLY_FEEDBACK_FORM_EN`
   - [ ] `VITE_TALLY_FEEDBACK_FORM_DA`
+- [ ] **Vercel / CVR lookup:** set `CVRAPI_USER_AGENT` (required by CVRAPI); optional `CVRAPI_TOKEN`, `CVRAPI_VERSION`, `CORS_ALLOW_ORIGIN`.
 
 ### 3) SEO / crawlability sanity checks
 
@@ -25,7 +26,7 @@
 - [ ] Invoice editor: `noindex, follow`.
 - [ ] Verify `robots.txt` and `sitemap.xml` in the built output:
   - [ ] `dist/robots.txt` contains the correct sitemap URL.
-  - [ ] `dist/sitemap.xml` contains your real production URL (not `example.com`).
+  - [ ] `dist/sitemap.xml` contains your real production URL (not the placeholder `https://yourdomain.com`).
 
 ### 4) Build verification
 

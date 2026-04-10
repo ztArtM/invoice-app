@@ -150,13 +150,20 @@ VITE_SITE_URL=https://your-domain.com
 - **`VITE_TALLY_FEEDBACK_FORM_EN`**
 - **`VITE_TALLY_FEEDBACK_FORM_DA`**
 
-### Optional (local dev API for CVR lookup)
+### Optional (CVR company lookup — local dev API + Vercel)
 
-These are only for `npm run dev:api` / `npm run dev:with-api`:
+**Local dev** (`npm run dev:api` / `npm run dev:with-api`):
 
 - `CVR_DEV_API_PORT` (default `8787`)
 - `CVRAPI_USER_AGENT` (recommended by CVRAPI)
 - `CVRAPI_TOKEN`, `CVRAPI_VERSION` (optional)
+
+**Vercel (production):** the repo includes `api/company-lookup.ts`, which Vercel deploys as `POST /api/company-lookup` (same path the UI calls). In the Vercel project **Environment Variables**, set at least:
+
+- `CVRAPI_USER_AGENT` (ASCII — required by CVRAPI)
+- `CVRAPI_TOKEN`, `CVRAPI_VERSION` (optional)
+
+Optional: `CORS_ALLOW_ORIGIN` if you need a specific origin (defaults to `*`). See `.env.example`.
 
 See `.env.example` for a ready template.
 
@@ -168,10 +175,12 @@ See `.env.example` for a ready template.
 npm run build
 ```
 
-Deploy the `dist/` folder to any static host (Netlify, Vercel static, Cloudflare Pages, GitHub Pages).
+**Vercel (recommended for this repo):** connect the GitHub repo; Vercel runs `npm run build`, serves the Vite app from `dist/`, and deploys **serverless** routes from the root `api/` folder (`vercel.json` includes an SPA rewrite that does not override `/api/*`). CVR lookup works in production once `CVRAPI_*` env vars are set (see above).
 
-- **SPA routing:** configure your host to serve `index.html` for unknown paths.
-- **Sitemap/robots:** generated at build time using `VITE_SITE_URL`. If you forget to set it, output defaults to `https://example.com` and should be fixed before launch.
+Deploy the `dist/` folder to any static host (Netlify, Cloudflare Pages, GitHub Pages) if you do not need the CVR API in production.
+
+- **SPA routing:** configure your host to serve `index.html` for unknown paths (or use `vercel.json` on Vercel).
+- **Sitemap/robots:** generated at build time from `scripts/buildSitemapXml.ts` using `VITE_SITE_URL`. If you forget to set it, output defaults to `https://yourdomain.com` and should be fixed before launch.
 
 ---
 
