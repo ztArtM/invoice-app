@@ -1,9 +1,9 @@
 export interface PageSeoPayload {
   title: string
   description: string
-  /** Absolute URL for `<link rel="canonical">` (typically site root for this SPA). */
+  /** Absolute URL for `<link rel="canonical">` (per-route, e.g. `/privacy`). */
   canonicalUrl: string
-  /** If set, used for `og:url` (e.g. hash URL for legal overlays); defaults to `canonicalUrl`. */
+  /** If set, used for `og:url`; defaults to `canonicalUrl`. */
   ogUrl?: string
   /** robots directive, e.g. `index, follow` or `noindex, follow`. */
   robots: string

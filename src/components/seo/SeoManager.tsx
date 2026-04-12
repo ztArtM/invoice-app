@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import type { Language, TranslationMessages } from '../../constants/translations'
-import { getCanonicalSiteUrl, getOgImageAbsoluteUrl, getSiteOrigin, seoConstants } from '../../constants/seo'
+import { getCanonicalUrlForPath, getOgImageAbsoluteUrl, seoConstants } from '../../constants/seo'
 import type { InfoRoute } from '../../utils/infoRoutes'
+import { getLegalRouteFromPath } from '../../utils/infoRoutes'
 import { applyPageSeo, type PageSeoPayload } from '../../utils/applyPageSeo'
 import { StructuredData } from './StructuredData'
 
 export interface SeoManagerProps {
-  phase: 'landing' | 'app'
-  infoRoute: InfoRoute | null
   language: Language
   t: TranslationMessages
 }
@@ -16,42 +16,44 @@ function ogLocale(language: Language): string {
   return language === 'da' ? 'da-DK' : 'en-US'
 }
 
-function hashUrl(route: InfoRoute): string {
-  return `${getSiteOrigin()}/#${route}`
+function legalPageCopy(
+  route: InfoRoute,
+  t: TranslationMessages,
+): { title: string; description: string } {
+  const pageTitle =
+    route === 'privacy'
+      ? t.legal.privacy.pageTitle
+      : route === 'terms'
+        ? t.legal.terms.pageTitle
+        : route === 'contact'
+          ? t.legal.contact.pageTitle
+          : t.legal.cookies.pageTitle
+  const pageDescription =
+    route === 'privacy'
+      ? t.seo.privacyDescription
+      : route === 'terms'
+        ? t.seo.termsDescription
+        : route === 'contact'
+          ? t.seo.contactDescription
+          : t.seo.cookiesDescription
+  return { title: pageTitle, description: pageDescription }
 }
 
-function buildPagePayload(props: SeoManagerProps): PageSeoPayload {
-  const { phase, infoRoute, language, t } = props
-  const canonical = getCanonicalSiteUrl()
+function buildPagePayload(props: SeoManagerProps & { pathname: string }): PageSeoPayload {
+  const { pathname, language, t } = props
+  const pageCanonical = getCanonicalUrlForPath(pathname)
   const ogImage = getOgImageAbsoluteUrl()
   const twitterCard = ogImage ? 'summary_large_image' : 'summary'
   const site = t.seo.siteNameShort
   const locale = ogLocale(language)
   const tw = seoConstants.twitterSite || undefined
 
-  if (infoRoute) {
-    const pageTitle =
-      infoRoute === 'privacy'
-        ? t.legal.privacy.pageTitle
-        : infoRoute === 'terms'
-          ? t.legal.terms.pageTitle
-          : infoRoute === 'contact'
-            ? t.legal.contact.pageTitle
-            : t.legal.cookies.pageTitle
-    const pageDescription =
-      infoRoute === 'privacy'
-        ? t.seo.privacyDescription
-        : infoRoute === 'terms'
-          ? t.seo.termsDescription
-          : infoRoute === 'contact'
-            ? t.seo.contactDescription
-            : t.seo.cookiesDescription
-
+  if (pathname === '/') {
     return {
-      title: `${pageTitle} · ${site}`,
-      description: pageDescription,
-      canonicalUrl: canonical,
-      ogUrl: hashUrl(infoRoute),
+      title: t.seo.landingTitle,
+      description: t.seo.landingDescription,
+      canonicalUrl: pageCanonical,
+      ogUrl: pageCanonical,
       robots: 'index, follow',
       siteName: site,
       locale,
@@ -61,11 +63,29 @@ function buildPagePayload(props: SeoManagerProps): PageSeoPayload {
     }
   }
 
-  if (phase === 'landing') {
+  if (pathname === '/builder') {
     return {
-      title: t.seo.landingTitle,
-      description: t.seo.landingDescription,
-      canonicalUrl: canonical,
+      title: `${t.seo.workspaceTitle} · ${site}`,
+      description: t.seo.workspaceDescription,
+      canonicalUrl: pageCanonical,
+      ogUrl: pageCanonical,
+      robots: 'index, follow',
+      siteName: site,
+      locale,
+      ogImageUrl: ogImage,
+      twitterCard,
+      twitterSite: tw,
+    }
+  }
+
+  const legal = getLegalRouteFromPath(pathname)
+  if (legal) {
+    const { title, description } = legalPageCopy(legal, t)
+    return {
+      title: `${title} · ${site}`,
+      description,
+      canonicalUrl: pageCanonical,
+      ogUrl: pageCanonical,
       robots: 'index, follow',
       siteName: site,
       locale,
@@ -76,10 +96,11 @@ function buildPagePayload(props: SeoManagerProps): PageSeoPayload {
   }
 
   return {
-    title: `${t.seo.workspaceTitle} · ${site}`,
-    description: t.seo.workspaceDescription,
-    canonicalUrl: canonical,
-    robots: 'noindex, follow',
+    title: t.seo.defaultTitle,
+    description: t.seo.defaultDescription,
+    canonicalUrl: getCanonicalUrlForPath('/'),
+    ogUrl: getCanonicalUrlForPath('/'),
+    robots: 'index, follow',
     siteName: site,
     locale,
     ogImageUrl: ogImage,
@@ -88,62 +109,21 @@ function buildPagePayload(props: SeoManagerProps): PageSeoPayload {
   }
 }
 
-function buildJsonLd(props: SeoManagerProps): unknown | null {
-  const { phase, infoRoute, t } = props
-  const canonical = getCanonicalSiteUrl()
+function buildJsonLd(props: SeoManagerProps & { pathname: string }): unknown | null {
+  const { pathname, t } = props
+  const originHome = getCanonicalUrlForPath('/')
   const name = seoConstants.productName
   const siteDescription = t.seo.defaultDescription
 
-  if (infoRoute) {
-    const pageTitle =
-      infoRoute === 'privacy'
-        ? t.legal.privacy.pageTitle
-        : infoRoute === 'terms'
-          ? t.legal.terms.pageTitle
-          : infoRoute === 'contact'
-            ? t.legal.contact.pageTitle
-            : t.legal.cookies.pageTitle
-    const pageDescription =
-      infoRoute === 'privacy'
-        ? t.seo.privacyDescription
-        : infoRoute === 'terms'
-          ? t.seo.termsDescription
-          : infoRoute === 'contact'
-            ? t.seo.contactDescription
-            : t.seo.cookiesDescription
-
+  if (pathname === '/') {
     return {
       '@context': 'https://schema.org',
       '@graph': [
         {
           '@type': 'WebSite',
-          '@id': `${canonical}#website`,
+          '@id': `${originHome}#website`,
           name,
-          url: canonical,
-          description: siteDescription,
-          inLanguage: ['en', 'da'],
-        },
-        {
-          '@type': 'WebPage',
-          '@id': hashUrl(infoRoute),
-          name: pageTitle,
-          description: pageDescription,
-          url: hashUrl(infoRoute),
-          isPartOf: { '@id': `${canonical}#website` },
-        },
-      ],
-    }
-  }
-
-  if (phase === 'landing') {
-    return {
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'WebSite',
-          '@id': `${canonical}#website`,
-          name,
-          url: canonical,
+          url: originHome,
           description: t.seo.landingDescription,
           inLanguage: ['en', 'da'],
         },
@@ -158,7 +138,34 @@ function buildJsonLd(props: SeoManagerProps): unknown | null {
             priceCurrency: 'DKK',
           },
           description: t.seo.landingDescription,
-          url: canonical,
+          url: originHome,
+        },
+      ],
+    }
+  }
+
+  const legal = getLegalRouteFromPath(pathname)
+  if (legal) {
+    const { title: pageTitle, description: pageDescription } = legalPageCopy(legal, t)
+    const pageUrl = getCanonicalUrlForPath(pathname)
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': `${originHome}#website`,
+          name,
+          url: originHome,
+          description: siteDescription,
+          inLanguage: ['en', 'da'],
+        },
+        {
+          '@type': 'WebPage',
+          '@id': pageUrl,
+          name: pageTitle,
+          description: pageDescription,
+          url: pageUrl,
+          isPartOf: { '@id': `${originHome}#website` },
         },
       ],
     }
@@ -168,17 +175,17 @@ function buildJsonLd(props: SeoManagerProps): unknown | null {
 }
 
 /**
- * Syncs document title, meta, canonical, Open Graph, and Twitter tags to the current view.
- * Renders JSON-LD for indexable views only (landing + legal overlays).
+ * Syncs document title, meta, canonical, Open Graph, and Twitter tags to the current route.
  */
-export function SeoManager({ phase, infoRoute, language, t }: SeoManagerProps) {
+export function SeoManager({ language, t }: SeoManagerProps) {
+  const { pathname } = useLocation()
   const payload = useMemo(
-    () => buildPagePayload({ phase, infoRoute, language, t }),
-    [phase, infoRoute, language, t],
+    () => buildPagePayload({ pathname, language, t }),
+    [pathname, language, t],
   )
   const jsonLd = useMemo(
-    () => buildJsonLd({ phase, infoRoute, language, t }),
-    [phase, infoRoute, language, t],
+    () => buildJsonLd({ pathname, language, t }),
+    [pathname, language, t],
   )
 
   useEffect(() => {

@@ -30,7 +30,19 @@ There is **no backend**, **no database**, and **no login**—everything runs in 
 
 - **Do not commit `.env` files.** Use `.env.example` as the template and set secrets in your hosting provider instead.
 - **Update publisher/contact metadata before going public:** see `src/constants/appMeta.ts` (`publisherName`, `supportEmail`, `effectiveDate`).
-- **Indexing policy:** landing + legal pages are indexable; the invoice editor is `noindex` (by design).
+- **Indexing policy:** landing, `/builder`, and legal routes are indexable (see `SeoManager`).
+
+---
+
+## URL routes (SPA)
+
+| Path | Content |
+|------|--------|
+| `/` | Marketing landing |
+| `/builder` | Invoice & quote editor + preview |
+| `/privacy`, `/terms`, `/contact`, `/cookies` | Legal pages |
+
+Old hash links (`/#privacy`, …) redirect once to the matching path (`HashToPathRedirect`). Internal links use `react-router-dom` (`Link`, `navigate`).
 
 ---
 

@@ -13,9 +13,22 @@ export function getSiteOrigin(): string {
   return 'http://localhost:5173'
 }
 
-/** Absolute URL for the single-page app root (trailing slash). */
+/** Absolute URL for the site root (`/`). */
 export function getCanonicalSiteUrl(): string {
   return `${getSiteOrigin()}/`
+}
+
+/**
+ * Canonical absolute URL for a pathname (e.g. `/privacy`, `/builder`).
+ * Root `/` yields `origin/` with trailing slash.
+ */
+export function getCanonicalUrlForPath(pathname: string): string {
+  const origin = getSiteOrigin()
+  const path = pathname.startsWith('/') ? pathname : `/${pathname}`
+  if (path === '/') {
+    return `${origin}/`
+  }
+  return `${origin}${path}`
 }
 
 /** Optional full URL to a PNG/JPG/WebP used for og:image and Twitter when set. */

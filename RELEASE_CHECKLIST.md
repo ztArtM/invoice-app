@@ -23,7 +23,7 @@
 
 - [ ] Landing page: correct title/description, indexable.
 - [ ] Legal pages (`#privacy`, `#terms`, `#contact`, `#cookies`): indexable, correct titles.
-- [ ] Invoice editor: `noindex, follow`.
+- [ ] Invoice builder (`/builder`): `index, follow` (or adjust if you change SEO policy).
 - [ ] Verify `robots.txt` and `sitemap.xml` in the built output:
   - [ ] `dist/robots.txt` contains the correct sitemap URL.
   - [ ] `dist/sitemap.xml` contains your real production URL (not the placeholder `https://yourdomain.com`).

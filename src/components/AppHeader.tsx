@@ -1,12 +1,13 @@
+import { Link } from 'react-router-dom'
 import logoUrl from '../assets/logo.svg'
 
 export interface AppHeaderProps {
   /**
-   * Return to the landing page (same tab, no router).
-   * When omitted, the logo is a normal link to `/` for a full reload fallback.
+   * When set, logo and home controls use in-app navigation to this path (e.g. `/`).
+   * When omitted, logo links to `/` with a full page load.
    */
-  onBackToHome?: () => void
-  /** Visible label for the text control and `aria-label` on the logo button. */
+  homeTo?: string
+  /** Visible label for the text control and `aria-label` on the logo control. */
   backToHomeLabel?: string
   /** Optional feedback trigger (builder app). */
   feedback?: {
@@ -16,36 +17,35 @@ export interface AppHeaderProps {
   }
 }
 
+const logoClassName =
+  'flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800'
+
 /**
  * Sticky top bar: brand (from `logo.svg`). Aligned with the main content max width.
  * Hidden when printing so only the invoice appears on paper/PDF.
  */
-export function AppHeader({ onBackToHome, backToHomeLabel, feedback }: AppHeaderProps) {
+export function AppHeader({ homeTo, backToHomeLabel, feedback }: AppHeaderProps) {
   const label = backToHomeLabel ?? 'Home'
+
+  const LogoInner = (
+    <img
+      src={logoUrl}
+      alt=""
+      width={200}
+      height={50}
+      className="h-8 w-auto max-w-full object-left object-contain sm:h-9"
+    />
+  )
 
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200/90 bg-white/90 shadow-[0_1px_0_0_rgba(0,0,0,0.04),0_4px_24px_-8px_rgba(15,23,42,0.08)] backdrop-blur-lg backdrop-saturate-150 print:hidden">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[3.75rem] sm:px-6">
-        {onBackToHome ? (
-          <button
-            type="button"
-            onClick={onBackToHome}
-            aria-label={label}
-            className="flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800"
-          >
-            <img
-              src={logoUrl}
-              alt=""
-              width={200}
-              height={50}
-              className="h-8 w-auto max-w-full object-left object-contain sm:h-9"
-            />
-          </button>
+        {homeTo ? (
+          <Link to={homeTo} aria-label={label} className={logoClassName}>
+            {LogoInner}
+          </Link>
         ) : (
-          <a
-            href="/"
-            className="flex items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800"
-          >
+          <a href="/" className={logoClassName}>
             <img
               src={logoUrl}
               alt="FakturaLyn"
@@ -67,14 +67,13 @@ export function AppHeader({ onBackToHome, backToHomeLabel, feedback }: AppHeader
               {feedback.label}
             </button>
           ) : null}
-          {onBackToHome ? (
-            <button
-              type="button"
-              onClick={onBackToHome}
+          {homeTo ? (
+            <Link
+              to={homeTo}
               className="rounded-md text-sm font-medium text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-800"
             >
               {label}
-            </button>
+            </Link>
           ) : null}
         </div>
       </div>

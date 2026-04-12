@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import type { TranslationMessages } from '../constants/translations'
 import { appMeta } from '../constants/appMeta'
 import type { InfoRoute } from '../utils/infoRoutes'
+import { pathForInfoRoute } from '../utils/infoRoutes'
 
 export interface AppFooterProps {
   t: TranslationMessages
@@ -16,12 +18,12 @@ function FooterLink({
   children: string
 }) {
   return (
-    <a
-      href={`#${route}`}
+    <Link
+      to={pathForInfoRoute(route)}
       className="rounded-md text-sm font-medium text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-800"
     >
       {children}
-    </a>
+    </Link>
   )
 }
 
@@ -53,4 +55,3 @@ export function AppFooter({ t, className = '' }: AppFooterProps) {
     </footer>
   )
 }
-

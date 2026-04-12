@@ -1,6 +1,7 @@
 /**
  * Builds a valid https://www.sitemaps.org/schemas/sitemap/0.9 `urlset` document.
- * Used at build time by Vite (`vite.config.ts`) and can be run standalone for inspection.
+ * Used at build time by Vite (`vite.config.ts`).
+ * Only real path URLs — no hash fragments.
  */
 
 export type SitemapChangefreq =
@@ -13,23 +14,21 @@ export type SitemapChangefreq =
   | 'never'
 
 export type SitemapUrlEntry = {
-  /** Path after origin, e.g. `/` or `/#privacy`. */
+  /** Path after origin, e.g. `/` or `/privacy`. */
   path: string
   changefreq: SitemapChangefreq
   /** 0.0–1.0 */
   priority: number
 }
 
-/**
- * Indexable public views (SPA). The invoice workspace is `noindex` and is omitted.
- * Legal/info routes match `src/utils/infoRoutes.ts` and `SeoManager` hash URLs.
- */
+/** Canonical indexable paths (no `#` fragments). */
 export const PUBLIC_SITEMAP_ENTRIES: SitemapUrlEntry[] = [
   { path: '/', changefreq: 'weekly', priority: 1.0 },
-  { path: '/#privacy', changefreq: 'yearly', priority: 0.6 },
-  { path: '/#terms', changefreq: 'yearly', priority: 0.6 },
-  { path: '/#contact', changefreq: 'monthly', priority: 0.7 },
-  { path: '/#cookies', changefreq: 'yearly', priority: 0.5 },
+  { path: '/builder', changefreq: 'weekly', priority: 0.9 },
+  { path: '/privacy', changefreq: 'yearly', priority: 0.6 },
+  { path: '/terms', changefreq: 'yearly', priority: 0.6 },
+  { path: '/contact', changefreq: 'monthly', priority: 0.7 },
+  { path: '/cookies', changefreq: 'yearly', priority: 0.5 },
 ]
 
 function escapeXmlText(s: string): string {
@@ -48,9 +47,6 @@ function normalizeBaseUrl(raw: string): string {
 function joinOriginAndPath(origin: string, path: string): string {
   if (path === '/') {
     return `${origin}/`
-  }
-  if (path.startsWith('/#')) {
-    return `${origin}${path}`
   }
   if (path.startsWith('/')) {
     return `${origin}${path}`
@@ -75,8 +71,11 @@ export function buildSitemapXml(options: {
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
   ]
 
+  const seen = new Set<string>()
   for (const e of entries) {
     const loc = joinOriginAndPath(origin, e.path)
+    if (seen.has(loc)) continue
+    seen.add(loc)
     const priority = Math.min(1, Math.max(0, e.priority))
     lines.push(`  <url>`)
     lines.push(`    <loc>${escapeXmlText(loc)}</loc>`)
