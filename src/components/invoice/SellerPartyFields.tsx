@@ -36,30 +36,12 @@ export function SellerPartyFields({ t, invoiceDocument, setInvoiceDocument }: Se
     }))
   }
 
-  const handleLookupSuccess = (fields: { name: string; address: string; cvrNumber: string }) => {
-    setInvoiceDocument((previous) => ({
-      ...previous,
-      seller: {
-        ...previous.seller,
-        name: fields.name || previous.seller.name,
-        address: fields.address || previous.seller.address,
-        sellerCvrNumber: fields.cvrNumber || previous.seller.sellerCvrNumber,
-        vatNumber: formatVatNumber(
-          previous.seller.countryCode,
-          previous.seller.vatNumber,
-          fields.cvrNumber || previous.seller.sellerCvrNumber,
-        ),
-      },
-    }))
-  }
-
   return (
     <>
       <CompanyCvrLookup
         formMessages={fm}
         cvrNumber={seller.sellerCvrNumber}
         onCvrDigitsChange={handleSellerCvrDigitsChange}
-        onLookupSuccess={handleLookupSuccess}
         idPrefix="seller"
       />
       <FormTextField

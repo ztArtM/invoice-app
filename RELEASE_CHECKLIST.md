@@ -3,7 +3,7 @@
 ### 1) Safety / secrets
 
 - [ ] Confirm **no `.env`** files are committed (only `.env.example`).
-- [ ] Confirm no API keys/tokens are hardcoded in `src/` or `server/`.
+- [ ] Confirm no API keys/tokens are hardcoded in `src/`.
 - [ ] Verify `src/constants/appMeta.ts` has **public-safe** values:
   - [ ] `publisherName`
   - [ ] `supportEmail`
@@ -17,7 +17,6 @@
 - [ ] (Optional) Configure Tally:
   - [ ] `VITE_TALLY_FEEDBACK_FORM_EN`
   - [ ] `VITE_TALLY_FEEDBACK_FORM_DA`
-- [ ] **Vercel / CVR lookup:** set `CVRAPI_USER_AGENT` (required by CVRAPI); optional `CVRAPI_TOKEN`, `CVRAPI_VERSION`, `CORS_ALLOW_ORIGIN`.
 
 ### 3) SEO / crawlability sanity checks
 

@@ -50,23 +50,6 @@ export function ClientPartyFields({ t, invoiceDocument, setInvoiceDocument }: Cl
     }))
   }
 
-  const handleLookupSuccess = (fields: { name: string; address: string; cvrNumber: string }) => {
-    setInvoiceDocument((previous) => ({
-      ...previous,
-      client: {
-        ...previous.client,
-        name: fields.name || previous.client.name,
-        address: fields.address || previous.client.address,
-        clientCvrNumber: fields.cvrNumber || previous.client.clientCvrNumber,
-        vatNumber: formatVatNumber(
-          previous.client.countryCode,
-          previous.client.vatNumber,
-          fields.cvrNumber || previous.client.clientCvrNumber,
-        ),
-      },
-    }))
-  }
-
   const handleCountryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const countryCode = event.target.value.trim().toUpperCase()
     setInvoiceDocument((previous) => ({
@@ -150,7 +133,6 @@ export function ClientPartyFields({ t, invoiceDocument, setInvoiceDocument }: Cl
           formMessages={fm}
           cvrNumber={client.clientCvrNumber}
           onCvrDigitsChange={handleClientCvrDigitsChange}
-          onLookupSuccess={handleLookupSuccess}
           idPrefix="client"
         />
       ) : null}

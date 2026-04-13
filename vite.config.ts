@@ -37,24 +37,5 @@ Sitemap: ${siteUrl}/sitemap.xml
         },
       },
     ],
-    server: {
-      proxy: {
-        // Proxies to `npm run dev:api` (see server/api/company-lookup.ts). Safe to leave on if API is off—lookups will fail until you start it.
-        '/api': {
-          target: 'http://127.0.0.1:8787',
-          changeOrigin: true,
-          configure(proxy) {
-            proxy.on('error', (err: NodeJS.ErrnoException) => {
-              if (err.code === 'ECONNREFUSED') {
-                console.warn(
-                  '\n[Vite] Nothing is listening on :8787 — CVR lookup will fail. In another terminal run: npm run dev:api\n' +
-                    '   Or start both together: npm run dev:with-api\n',
-                )
-              }
-            })
-          },
-        },
-      },
-    },
   }
 })
