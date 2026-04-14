@@ -19,6 +19,19 @@ export const translations = {
       cookies: 'Cookies',
       footerNavAria: 'Legal pages and contact',
       trustLine: 'Built for simple invoice creation. Drafts stay in your browser.',
+      resourcesNavAria: 'Product and guides',
+      productHeading: 'Product',
+      guidesHeading: 'Guides',
+      linkGratisFakturaProgram: 'Free invoice program',
+      linkLavFakturaOnline: 'Create invoices online',
+      linkFakturaSkabelon: 'Invoice template',
+      linkGratisFakturaSkabelon: 'Free invoice template',
+      linkTilbudSkabelon: 'Quote template',
+      linkTilbudVsFaktura: 'Quote vs invoice',
+      linkHvordanFaktura: 'How do you create an invoice?',
+      linkHvadIndeholderFaktura: 'What should an invoice include?',
+      linkFakturaUdenCvr: 'Invoice without a CVR number',
+      linkFakturaTilFreelancer: 'Invoice for freelancers',
     },
     legal: {
       back: 'Back',
@@ -126,12 +139,12 @@ export const translations = {
     },
     seo: {
       siteNameShort: 'FakturaLyn',
-      defaultTitle: 'FakturaLyn – Simple invoices and quotes online',
+      defaultTitle: 'Free invoicing for freelancers & small businesses | FakturaLyn',
       defaultDescription:
-        'Create professional invoices and quotes in your browser. Line items, VAT, PDF export—drafts stay on your device.',
-      landingTitle: 'FakturaLyn – Invoices and quotes without extra complexity',
+        'Create professional invoices and quotes online. FakturaLyn is simple invoicing software for freelancers and small businesses in Denmark.',
+      landingTitle: 'Free invoicing for freelancers & small businesses | FakturaLyn',
       landingDescription:
-        'Create a professional PDF in one place. English or Danish. VAT when you need it. No accounting software.',
+        'Create professional invoices and quotes online. FakturaLyn is simple invoicing software for freelancers and small businesses in Denmark.',
       privacyDescription:
         'How invoice drafts and feedback are handled in this browser-based invoice builder.',
       termsDescription: 'Terms of service for using this invoice and quote builder.',
@@ -145,7 +158,7 @@ export const translations = {
       skipToContent: 'Skip to main content',
       navStart: 'Open editor',
       heroKicker: 'Freelancers and small businesses',
-      heroHeadline: 'Invoices and quotes, without the extra noise.',
+      heroHeadline: 'Free invoice software for freelancers and small businesses',
       heroSub:
         'Create a professional PDF in one place. English or Danish. VAT when you need it. No accounting software.',
       heroCtaPrimary: 'Start free—no account',
@@ -181,6 +194,36 @@ export const translations = {
       finalCta: 'Open the editor',
       footerTagline: 'Clear invoices and quotes. No unnecessary complexity.',
       footerNote: 'Drafts are stored only in your browser. We do not store them on our servers.',
+      seoHomepageHeading: 'Free invoicing software for freelancers in Denmark',
+      seoHomepageIntro:
+        'FakturaLyn is free invoicing software for freelancers and small businesses in Denmark. You can easily create professional invoices and quotes online without unnecessary complexity. It is designed for Danish needs so you can start billing quickly.',
+      seoH2OnlineTitle: 'Create invoices online quickly and easily',
+      seoH2OnlineBody:
+        'With FakturaLyn you can create an invoice online in minutes. Enter your details, add products or services, and generate a finished PDF ready to send to your client. No manual templates or complex accounting software.',
+      seoH2InvoiceContentsTitle: 'What should an invoice include?',
+      seoH2InvoiceContentsIntro:
+        'When you create an invoice in Denmark, there are several details that should typically appear on the invoice:',
+      seoInvoiceContentsLi1: 'Invoice number',
+      seoInvoiceContentsLi2: 'Invoice date',
+      seoInvoiceContentsLi3: 'Company name, address, and CVR number',
+      seoInvoiceContentsLi4: "Customer's name and address",
+      seoInvoiceContentsLi5: 'Description of goods or services',
+      seoInvoiceContentsLi6: 'Price, VAT, and total amount',
+      seoH2InvoiceContentsOutro:
+        'FakturaLyn helps you create invoices that are quick to build and easy to send to your customers.',
+      seoH2FreelancerTitle: 'Invoices as a freelancer or without a CVR',
+      seoFreelancerBody1:
+        'As a freelancer in Denmark you may sometimes need to send an invoice without a CVR number. It is therefore important that your invoices remain clear, professional, and include the relevant information.',
+      seoFreelancerBody2:
+        'Whether you are a new freelancer or run a small business, FakturaLyn makes it easy to create invoices and quotes online.',
+      seoInternalLinksBefore: 'Learn more about our ',
+      seoInternalLinkAnchorGratis: 'free invoice software for freelancers',
+      seoInternalLinksMiddle: ', or see how you can ',
+      seoInternalLinkAnchorLav: 'create invoices online',
+      seoInternalLinksAfter: ' in the browser with FakturaLyn.',
+      popularGuidesHeading: 'Guides on invoices and quotes',
+      popularGuidesIntro:
+        'Get help with invoices, quotes, and billing with our straightforward guides for freelancers and small businesses.',
     },
     workspace: {
       title: 'Invoice & quote builder',
@@ -352,6 +395,19 @@ export const translations = {
       cookies: 'Cookies',
       footerNavAria: 'Juridiske sider og kontakt',
       trustLine: 'Bygget til enkel fakturering. Kladder bliver i din browser.',
+      resourcesNavAria: 'Produkt og guides',
+      productHeading: 'Produkt',
+      guidesHeading: 'Guides',
+      linkGratisFakturaProgram: 'Gratis faktura program',
+      linkLavFakturaOnline: 'Lav faktura online',
+      linkFakturaSkabelon: 'Faktura skabelon',
+      linkGratisFakturaSkabelon: 'Gratis faktura skabelon',
+      linkTilbudSkabelon: 'Tilbud skabelon',
+      linkTilbudVsFaktura: 'Tilbud vs faktura',
+      linkHvordanFaktura: 'Hvordan laver man en faktura?',
+      linkHvadIndeholderFaktura: 'Hvad skal en faktura indeholde?',
+      linkFakturaUdenCvr: 'Faktura uden CVR',
+      linkFakturaTilFreelancer: 'Faktura til freelancer',
     },
     legal: {
       back: 'Tilbage',
@@ -459,12 +515,12 @@ export const translations = {
     },
     seo: {
       siteNameShort: 'FakturaLyn',
-      defaultTitle: 'FakturaLyn – Simple fakturaer og tilbud online',
+      defaultTitle: 'Gratis faktura program til freelancere | FakturaLyn',
       defaultDescription:
-        'Lav professionelle fakturaer og tilbud i din browser. Linjer, moms, PDF—kladder ligger på din enhed.',
-      landingTitle: 'FakturaLyn – Fakturaer og tilbud uden unødig kompleksitet',
+        'Lav professionelle fakturaer og tilbud online. FakturaLyn er et enkelt faktura program til freelancere og små virksomheder i Danmark.',
+      landingTitle: 'Gratis faktura program til freelancere | FakturaLyn',
       landingDescription:
-        'Lav en professionel PDF ét sted. Dansk eller engelsk. Moms når du har brug for det. Intet regnskabsprogram.',
+        'Lav professionelle fakturaer og tilbud online. FakturaLyn er et enkelt faktura program til freelancere og små virksomheder i Danmark.',
       privacyDescription:
         'Hvordan fakturakladder og feedback håndteres i FakturaLyn i browseren.',
       termsDescription: 'Servicevilkår for brug af denne faktura- og tilbudsbygger.',
@@ -478,7 +534,7 @@ export const translations = {
       skipToContent: 'Spring til hovedindhold',
       navStart: 'Åbn editoren',
       heroKicker: 'Freelancere og små virksomheder',
-      heroHeadline: 'Fakturaer og tilbud uden unødig kompleksitet.',
+      heroHeadline: 'Gratis faktura program til freelancere og små virksomheder',
       heroSub:
         'Lav en professionel PDF ét sted. Dansk eller engelsk. Moms når du har brug for det. Intet regnskabsprogram.',
       heroCtaPrimary: 'Start gratis—uden konto',
@@ -514,6 +570,36 @@ export const translations = {
       finalCta: 'Åbn editoren',
       footerTagline: 'Tydelige fakturaer og tilbud. Uden unødig kompleksitet.',
       footerNote: 'Kladder gemmes kun i din browser. Vi gemmer dem ikke på vores servere.',
+      seoHomepageHeading: 'Gratis faktura program til freelancere i Danmark',
+      seoHomepageIntro:
+        'FakturaLyn er et gratis faktura program til freelancere og små virksomheder i Danmark. Du kan nemt lave professionelle fakturaer og tilbud online uden unødig kompleksitet. Systemet er designet til danske behov, så du hurtigt kan komme i gang med fakturering.',
+      seoH2OnlineTitle: 'Lav faktura online hurtigt og nemt',
+      seoH2OnlineBody:
+        'Med FakturaLyn kan du lave en faktura online på få minutter. Indtast dine oplysninger, tilføj produkter eller ydelser, og generer en færdig PDF klar til at sende til kunden. Du slipper for manuelle skabeloner og komplekse regnskabsprogrammer.',
+      seoH2InvoiceContentsTitle: 'Hvad skal en faktura indeholde?',
+      seoH2InvoiceContentsIntro:
+        'Når du laver en faktura i Danmark, er der en række oplysninger, der typisk skal fremgå af fakturaen:',
+      seoInvoiceContentsLi1: 'Fakturanummer',
+      seoInvoiceContentsLi2: 'Fakturadato',
+      seoInvoiceContentsLi3: 'Virksomhedsnavn, adresse og CVR-nummer',
+      seoInvoiceContentsLi4: 'Kundens navn og adresse',
+      seoInvoiceContentsLi5: 'Beskrivelse af varer eller ydelser',
+      seoInvoiceContentsLi6: 'Pris, moms og samlet beløb',
+      seoH2InvoiceContentsOutro:
+        'FakturaLyn hjælper dig med at lave fakturaer, der er hurtige at oprette og nemme at sende til dine kunder.',
+      seoH2FreelancerTitle: 'Faktura som freelancer eller uden CVR',
+      seoFreelancerBody1:
+        'Som freelancer i Danmark kan du i nogle tilfælde have behov for at sende en faktura uden CVR-nummer. Derfor er det vigtigt, at dine fakturaer stadig er tydelige, professionelle og indeholder de relevante oplysninger.',
+      seoFreelancerBody2:
+        'Uanset om du er ny freelancer eller driver en mindre virksomhed, gør FakturaLyn det nemt at lave fakturaer og tilbud online.',
+      seoInternalLinksBefore: 'Læs mere om vores ',
+      seoInternalLinkAnchorGratis: 'gratis faktura program',
+      seoInternalLinksMiddle: ' til freelancere, eller se hvordan du kan ',
+      seoInternalLinkAnchorLav: 'lave faktura online',
+      seoInternalLinksAfter: ' i browseren med FakturaLyn.',
+      popularGuidesHeading: 'Guides om fakturaer og tilbud',
+      popularGuidesIntro:
+        'Få hjælp til fakturaer, tilbud og fakturering med vores enkle guides for freelancere og små virksomheder.',
     },
     workspace: {
       title: 'Faktura- og tilbudsbygger',

@@ -13,6 +13,13 @@ export interface PageSeoPayload {
   twitterCard: 'summary' | 'summary_large_image'
   /** Optional @username for twitter:site (without @). */
   twitterSite?: string
+  /** Open Graph type — default `website`. */
+  ogType?: 'website' | 'article'
+  /**
+   * Bilingual alternates for `link[rel="alternate"][hreflang]`.
+   * When empty or omitted, existing app-managed alternates are removed.
+   */
+  hreflangAlternates?: { hreflang: string; href: string }[]
 }
 
 const SEO_DATA_ATTR = 'data-app-seo'
@@ -63,7 +70,7 @@ export function applyPageSeo(payload: PageSeoPayload) {
   setMetaName('description', payload.description)
   setMetaName('robots', payload.robots)
 
-  setMetaProperty('og:type', 'website')
+  setMetaProperty('og:type', payload.ogType ?? 'website')
   setMetaProperty('og:title', payload.title)
   setMetaProperty('og:description', payload.description)
   setMetaProperty('og:url', payload.ogUrl ?? payload.canonicalUrl)
@@ -96,4 +103,15 @@ export function applyPageSeo(payload: PageSeoPayload) {
   }
 
   ensureLinkRel('canonical').setAttribute('href', payload.canonicalUrl)
+
+  document.querySelectorAll('link[rel="alternate"][data-app-seo]').forEach((el) => el.remove())
+  const alternates = payload.hreflangAlternates ?? []
+  for (const alt of alternates) {
+    const link = document.createElement('link')
+    link.setAttribute('rel', 'alternate')
+    link.setAttribute('hreflang', alt.hreflang)
+    link.setAttribute('href', alt.href)
+    link.setAttribute(SEO_DATA_ATTR, '1')
+    document.head.appendChild(link)
+  }
 }

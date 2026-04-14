@@ -1,0 +1,22 @@
+* text=auto
+
+# Enforce LF for source + docs
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.js   text eol=lf
+*.jsx  text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+
+# Keep common binaries out of normalization
+*.png  -text
+*.jpg  -text
+*.jpeg -text
+*.gif  -text
+*.webp -text
+*.ico  -text
+*.pdf  -text
+*.woff  -text
+*.woff2 -text

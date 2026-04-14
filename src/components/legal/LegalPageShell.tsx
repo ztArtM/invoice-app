@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { TranslationMessages } from '../../constants/translations'
+import type { SeoLocale } from '../../constants/seoLocaleRoutes'
 import { appMeta } from '../../constants/appMeta'
 import { AppFooter } from '../AppFooter'
 
@@ -9,9 +10,27 @@ export interface LegalPageShellProps {
   subtitle?: string
   children: ReactNode
   onBack: () => void
+  /** Default true. Set false for marketing/SEO pages without a legal “last updated” line. */
+  showLastUpdated?: boolean
+  /** When set, shows EN/DA link to the paired SEO URL (see `seoLocaleRoutes`). */
+  languageSwitcher?: ReactNode
+  /** Optional neutral line for article guides (no fabricated dates). */
+  articleFreshnessNote?: string
+  /** Locale for footer product/guide links (`seoPath`). Defaults to Danish. */
+  footerLinkLocale?: SeoLocale
 }
 
-export function LegalPageShell({ t, title, subtitle, children, onBack }: LegalPageShellProps) {
+export function LegalPageShell({
+  t,
+  title,
+  subtitle,
+  children,
+  onBack,
+  showLastUpdated = true,
+  languageSwitcher,
+  articleFreshnessNote,
+  footerLinkLocale = 'da',
+}: LegalPageShellProps) {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased">
       <header className="border-b border-zinc-200 bg-white">
@@ -23,7 +42,10 @@ export function LegalPageShell({ t, title, subtitle, children, onBack }: LegalPa
           >
             {t.legal.back}
           </button>
-          <p className="text-sm font-semibold text-zinc-900">{appMeta.appName}</p>
+          <div className="flex items-center gap-3">
+            {languageSwitcher}
+            <p className="text-sm font-semibold text-zinc-900">{appMeta.appName}</p>
+          </div>
         </div>
       </header>
 
@@ -31,9 +53,14 @@ export function LegalPageShell({ t, title, subtitle, children, onBack }: LegalPa
         <header className="mb-8 space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">{title}</h1>
           {subtitle ? <p className="text-sm leading-relaxed text-zinc-600">{subtitle}</p> : null}
-          <p className="text-xs text-zinc-400">
-            {t.legal.lastUpdated} {appMeta.effectiveDate}
-          </p>
+          {articleFreshnessNote ? (
+            <p className="text-sm leading-relaxed text-zinc-500">{articleFreshnessNote}</p>
+          ) : null}
+          {showLastUpdated ? (
+            <p className="text-xs text-zinc-400">
+              {t.legal.lastUpdated} {appMeta.effectiveDate}
+            </p>
+          ) : null}
         </header>
 
         <article className="prose prose-zinc max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-brand-800 prose-a:underline-offset-4">
@@ -41,7 +68,7 @@ export function LegalPageShell({ t, title, subtitle, children, onBack }: LegalPa
         </article>
       </main>
 
-      <AppFooter t={t} />
+      <AppFooter t={t} linkLocale={footerLinkLocale} />
     </div>
   )
 }

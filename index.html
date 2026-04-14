@@ -1,27 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="da">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#142f86" />
     <meta
       name="description"
-      content="Create professional invoices and quotes in your browser. Line items, VAT, PDF export—drafts stay on your device."
+      content="Lav professionelle fakturaer og tilbud online. FakturaLyn er et enkelt faktura program til freelancere og små virksomheder i Danmark."
     />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FakturaLyn" />
-    <meta property="og:title" content="FakturaLyn – Simple invoices and quotes online" />
+    <meta
+      property="og:title"
+      content="Gratis faktura program til freelancere | FakturaLyn"
+    />
     <meta
       property="og:description"
-      content="Create professional invoices and quotes in your browser. Line items, VAT, PDF export—drafts stay on your device."
+      content="Lav professionelle fakturaer og tilbud online. FakturaLyn er et enkelt faktura program til freelancere og små virksomheder i Danmark."
     />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="da_DK" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="FakturaLyn – Simple invoices and quotes online" />
+    <meta
+      name="twitter:title"
+      content="Gratis faktura program til freelancere | FakturaLyn"
+    />
     <meta
       name="twitter:description"
-      content="Create professional invoices and quotes in your browser. Line items, VAT, PDF export—drafts stay on your device."
+      content="Lav professionelle fakturaer og tilbud online. FakturaLyn er et enkelt faktura program til freelancere og små virksomheder i Danmark."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,9 +39,68 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon192.png" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>FakturaLyn – Simple invoices and quotes online</title>
+    <title>Gratis faktura program til freelancere | FakturaLyn</title>
   </head>
   <body>
+    <!--
+      Danish SEO copy: present in raw HTML for crawlers without JS.
+      Removed in main.tsx before React mounts (see src/main.tsx) so the React landing page is the single visible instance for users with JS.
+    -->
+    <section
+      id="seo-homepage-prerender"
+      class="border-b border-zinc-100 bg-white py-16 sm:py-20"
+      aria-labelledby="seo-homepage-content-prerender"
+    >
+      <div class="mx-auto max-w-3xl px-4 sm:px-6">
+        <h2
+          id="seo-homepage-content-prerender"
+          class="text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl"
+        >
+          Gratis faktura program til freelancere i Danmark
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-zinc-600">
+          FakturaLyn er et gratis faktura program til freelancere og små virksomheder i Danmark. Du kan nemt lave
+          professionelle fakturaer og tilbud online uden unødig kompleksitet. Systemet er designet til danske behov, så du
+          hurtigt kan komme i gang med fakturering.
+        </p>
+        <h2 class="mt-10 text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">
+          Lav faktura online hurtigt og nemt
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-zinc-600">
+          Med FakturaLyn kan du lave en faktura online på få minutter. Indtast dine oplysninger, tilføj produkter eller
+          ydelser, og generer en færdig PDF klar til at sende til kunden. Du slipper for manuelle skabeloner og komplekse
+          regnskabsprogrammer.
+        </p>
+        <h2 class="mt-10 text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">
+          Hvad skal en faktura indeholde?
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-zinc-600">
+          Når du laver en faktura i Danmark, er der en række oplysninger, der typisk skal fremgå af fakturaen:
+        </p>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-600">
+          <li>Fakturanummer</li>
+          <li>Fakturadato</li>
+          <li>Virksomhedsnavn, adresse og CVR-nummer</li>
+          <li>Kundens navn og adresse</li>
+          <li>Beskrivelse af varer eller ydelser</li>
+          <li>Pris, moms og samlet beløb</li>
+        </ul>
+        <p class="mt-4 text-base leading-relaxed text-zinc-600">
+          FakturaLyn hjælper dig med at lave fakturaer, der er hurtige at oprette og nemme at sende til dine kunder.
+        </p>
+        <h2 class="mt-10 text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl">
+          Faktura som freelancer eller uden CVR
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-zinc-600">
+          Som freelancer i Danmark kan du i nogle tilfælde have behov for at sende en faktura uden CVR-nummer. Derfor er
+          det vigtigt, at dine fakturaer stadig er tydelige, professionelle og indeholder de relevante oplysninger.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-zinc-600">
+          Uanset om du er ny freelancer eller driver en mindre virksomhed, gør FakturaLyn det nemt at lave fakturaer og
+          tilbud online.
+        </p>
+      </div>
+    </section>
     <div id="root"></div>
     <noscript>
       <p>FakturaLyn needs JavaScript to run the invoice builder. Enable JavaScript to continue.</p>

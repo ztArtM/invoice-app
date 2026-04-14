@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { AppHeader } from './components/AppHeader'
 import { FeedbackModal } from './components/feedback/FeedbackModal'
 import { PdfSurveyMobileBanner } from './components/feedback/PdfSurveyMobileBanner'
@@ -27,8 +27,25 @@ import {
 import type { InfoRoute } from './utils/infoRoutes'
 import { LegalPageShell } from './components/legal/LegalPageShell'
 import { ContactContent, CookiesContent, PrivacyPolicyContent, TermsContent } from './components/legal/LegalPages'
+import { FakturaSkabelonPage } from './components/seo/FakturaSkabelonPage'
+import { FakturaTilFreelancerPage } from './components/seo/FakturaTilFreelancerPage'
+import { GratisFakturaSkabelonPage } from './components/seo/GratisFakturaSkabelonPage'
+import { FakturaUdenCvrPage } from './components/seo/FakturaUdenCvrPage'
+import { HvadSkalEnFakturaIndeholdePage } from './components/seo/HvadSkalEnFakturaIndeholdePage'
+import { HvordanLaverManEnFakturaPage } from './components/seo/HvordanLaverManEnFakturaPage'
+import { GratisFakturaProgramPage } from './components/seo/GratisFakturaProgramPage'
+import { LavFakturaOnlinePage } from './components/seo/LavFakturaOnlinePage'
 import { SeoManager } from './components/seo/SeoManager'
+import { TilbudSkabelonPage } from './components/seo/TilbudSkabelonPage'
+import { TilbudVsFakturaPage } from './components/seo/TilbudVsFakturaPage'
+import { FakturaSkabelonVsOnlineProgramPage } from './components/seo/FakturaSkabelonVsOnlineProgramPage'
 import { INVOICE_DRAFT_STORAGE_KEY } from './constants/storageKeys'
+import {
+  homeLocaleFromPath,
+  isHomePath,
+  normalizeSeoPathname,
+  resolveSeoPageFromPathname,
+} from './constants/seoLocaleRoutes'
 
 /** Wait this many ms after the last edit before writing (reduces localStorage writes while typing). */
 const SAVE_DEBOUNCE_MS = 400
@@ -111,13 +128,40 @@ function LegalRouteView({
  */
 function App() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [language, setLanguage] = useState<Language>('da')
   const t = translations[language]
 
-  const handleLanguageChange = (lang: Language) => {
-    setPdfSurveyBannerShareUrl(null)
-    setLanguage(lang)
-  }
+  useEffect(() => {
+    const p = normalizeSeoPathname(location.pathname)
+    if (p === '/builder') return
+    if (['/privacy', '/terms', '/contact', '/cookies'].includes(p)) return
+
+    const resolved = resolveSeoPageFromPathname(p)
+    if (resolved) {
+      setLanguage(resolved.locale === 'da' ? 'da' : 'en')
+      return
+    }
+    if (isHomePath(p)) {
+      setLanguage(homeLocaleFromPath(p) === 'en' ? 'en' : 'da')
+      return
+    }
+    if (p.startsWith('/en')) {
+      setLanguage('en')
+    }
+  }, [location.pathname])
+
+  const handleLanguageChange = useCallback(
+    (lang: Language) => {
+      setPdfSurveyBannerShareUrl(null)
+      setLanguage(lang)
+      const p = normalizeSeoPathname(location.pathname)
+      if (isHomePath(p)) {
+        navigate(lang === 'en' ? '/en/' : '/')
+      }
+    },
+    [location.pathname, navigate],
+  )
 
   const localeForFormatting = getLocaleForLanguage(language)
   const [invoiceDocument, setInvoiceDocument] = useState<InvoiceDocument>(() =>
@@ -204,6 +248,15 @@ function App() {
     return () => window.clearTimeout(timeoutId)
   }, [invoiceDocument])
 
+  const openBuilder = () => {
+    try {
+      sessionStorage.setItem(APP_PHASE_STORAGE_KEY, 'app')
+    } catch {
+      /* ignore */
+    }
+    navigate('/builder')
+  }
+
   const clearLocalData = () => {
     if (
       !window.confirm(
@@ -234,14 +287,19 @@ function App() {
             <LandingPage
               language={language}
               onLanguageChange={handleLanguageChange}
-              onStartApp={() => {
-                try {
-                  sessionStorage.setItem(APP_PHASE_STORAGE_KEY, 'app')
-                } catch {
-                  /* ignore */
-                }
-                navigate('/builder')
-              }}
+              onStartApp={openBuilder}
+              t={t}
+            />
+          }
+        />
+        <Route path="/en" element={<Navigate to="/en/" replace />} />
+        <Route
+          path="/en/"
+          element={
+            <LandingPage
+              language={language}
+              onLanguageChange={handleLanguageChange}
+              onStartApp={openBuilder}
               t={t}
             />
           }
@@ -257,7 +315,7 @@ function App() {
                 {t.app.skipToMain}
               </a>
               <AppHeader
-                homeTo="/"
+                homeTo={language === 'en' ? '/en/' : '/'}
                 backToHomeLabel={t.app.backToHome}
                 feedback={{
                   label: t.feedback.openButton,
@@ -320,6 +378,248 @@ function App() {
         <Route
           path="/cookies"
           element={<LegalRouteView route="cookies" t={t} onClearLocalData={clearLocalData} />}
+        />
+        <Route
+          path="/gratis-faktura-program"
+          element={
+            <GratisFakturaProgramPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/free-invoice-software"
+          element={
+            <GratisFakturaProgramPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/lav-faktura-online"
+          element={
+            <LavFakturaOnlinePage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/create-invoice-online"
+          element={
+            <LavFakturaOnlinePage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/faktura-skabelon"
+          element={
+            <FakturaSkabelonPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/invoice-template"
+          element={
+            <FakturaSkabelonPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/hvordan-laver-man-en-faktura"
+          element={
+            <HvordanLaverManEnFakturaPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/how-to-make-an-invoice"
+          element={
+            <HvordanLaverManEnFakturaPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/hvad-skal-en-faktura-indeholde"
+          element={
+            <HvadSkalEnFakturaIndeholdePage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/what-should-an-invoice-include"
+          element={
+            <HvadSkalEnFakturaIndeholdePage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/faktura-uden-cvr"
+          element={
+            <FakturaUdenCvrPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/invoice-without-cvr"
+          element={
+            <FakturaUdenCvrPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/faktura-til-freelancer"
+          element={
+            <FakturaTilFreelancerPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/invoice-for-freelancers"
+          element={
+            <FakturaTilFreelancerPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/gratis-faktura-skabelon"
+          element={
+            <GratisFakturaSkabelonPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/free-invoice-template"
+          element={
+            <GratisFakturaSkabelonPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/tilbud-skabelon"
+          element={
+            <TilbudSkabelonPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/quote-template"
+          element={
+            <TilbudSkabelonPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/tilbud-vs-faktura"
+          element={
+            <TilbudVsFakturaPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/quote-vs-invoice"
+          element={
+            <TilbudVsFakturaPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/faktura-skabelon-vs-online-faktura-program"
+          element={
+            <FakturaSkabelonVsOnlineProgramPage
+              locale="da"
+              t={t}
+              onBack={() => navigate('/')}
+              onStartApp={openBuilder}
+            />
+          }
+        />
+        <Route
+          path="/en/invoice-template-vs-online-invoicing"
+          element={
+            <FakturaSkabelonVsOnlineProgramPage
+              locale="en"
+              t={t}
+              onBack={() => navigate('/en/')}
+              onStartApp={openBuilder}
+            />
+          }
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

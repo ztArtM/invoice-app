@@ -1,10 +1,11 @@
-import type { TranslationMessages } from '../../constants/translations'
+import type { Language, TranslationMessages } from '../../constants/translations'
 import { AppFooter } from '../AppFooter'
 
 export interface LandingFooterProps {
+  language: Language
   t: TranslationMessages
 }
 
-export function LandingFooter({ t }: LandingFooterProps) {
-  return <AppFooter t={t} />
+export function LandingFooter({ language, t }: LandingFooterProps) {
+  return <AppFooter t={t} linkLocale={language === 'en' ? 'en' : 'da'} />
 }

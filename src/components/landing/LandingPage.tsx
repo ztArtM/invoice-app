@@ -6,6 +6,9 @@ import { HeroSection } from './HeroSection'
 import { HowItWorksSection } from './HowItWorksSection'
 import { LandingFooter } from './LandingFooter'
 import { LandingNav } from './LandingNav'
+import { HomepageFaqSection } from './HomepageFaqSection'
+import { HomepagePopularGuidesSection } from './HomepagePopularGuidesSection'
+import { SeoHomepageContentSection } from './SeoHomepageContentSection'
 import { TrustSection } from './TrustSection'
 
 export interface LandingPageProps {
@@ -39,13 +42,16 @@ export function LandingPage({ language, onLanguageChange, onStartApp, t }: Landi
       />
       <main id="landing-main">
         <HeroSection onStartApp={onStartApp} t={t} />
+        <SeoHomepageContentSection t={t} />
+        {language === 'da' ? <HomepageFaqSection /> : null}
         <BenefitsSection t={t} />
         <FeaturesSection t={t} />
         <HowItWorksSection t={t} />
         <TrustSection t={t} />
         <FinalCtaSection onStartApp={onStartApp} t={t} />
+        <HomepagePopularGuidesSection t={t} language={language} />
       </main>
-      <LandingFooter t={t} />
+      <LandingFooter language={language} t={t} />
     </div>
   )
 }

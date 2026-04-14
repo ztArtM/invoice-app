@@ -18,7 +18,7 @@ export function LandingNav({ language, onLanguageChange, onStartApp, t }: Landin
     <header className="sticky top-0 z-40 border-b border-zinc-200/90 bg-white/90 backdrop-blur-lg backdrop-saturate-150">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[3.75rem] sm:px-6">
         <Link
-          to="/"
+          to={language === 'en' ? '/en/' : '/'}
           className="flex shrink-0 items-center rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-800"
         >
           <img

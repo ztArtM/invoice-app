@@ -1,6 +1,16 @@
 import { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { Language, TranslationMessages } from '../../constants/translations'
+import { HOMEPAGE_FAQ_ITEMS } from '../../constants/homepageFaqDa'
+import {
+  buildHreflangAlternates,
+  homeLocaleFromPath,
+  isHomePath,
+  resolveSeoPageFromPathname,
+  SEO_PAGE_DEFINITIONS,
+  type SeoLocale,
+  type SeoPageId,
+} from '../../constants/seoLocaleRoutes'
 import { getCanonicalUrlForPath, getOgImageAbsoluteUrl, seoConstants } from '../../constants/seo'
 import type { InfoRoute } from '../../utils/infoRoutes'
 import { getLegalRouteFromPath } from '../../utils/infoRoutes'
@@ -41,107 +51,182 @@ function legalPageCopy(
 
 function buildPagePayload(props: SeoManagerProps & { pathname: string }): PageSeoPayload {
   const { pathname, language, t } = props
-  const pageCanonical = getCanonicalUrlForPath(pathname)
   const ogImage = getOgImageAbsoluteUrl()
   const twitterCard = ogImage ? 'summary_large_image' : 'summary'
   const site = t.seo.siteNameShort
   const locale = ogLocale(language)
   const tw = seoConstants.twitterSite || undefined
 
-  if (pathname === '/') {
-    return {
-      title: t.seo.landingTitle,
-      description: t.seo.landingDescription,
-      canonicalUrl: pageCanonical,
-      ogUrl: pageCanonical,
-      robots: 'index, follow',
-      siteName: site,
-      locale,
-      ogImageUrl: ogImage,
-      twitterCard,
-      twitterSite: tw,
-    }
-  }
-
-  if (pathname === '/builder') {
-    return {
-      title: `${t.seo.workspaceTitle} · ${site}`,
-      description: t.seo.workspaceDescription,
-      canonicalUrl: pageCanonical,
-      ogUrl: pageCanonical,
-      robots: 'index, follow',
-      siteName: site,
-      locale,
-      ogImageUrl: ogImage,
-      twitterCard,
-      twitterSite: tw,
-    }
-  }
-
-  const legal = getLegalRouteFromPath(pathname)
-  if (legal) {
-    const { title, description } = legalPageCopy(legal, t)
-    return {
-      title: `${title} · ${site}`,
-      description,
-      canonicalUrl: pageCanonical,
-      ogUrl: pageCanonical,
-      robots: 'index, follow',
-      siteName: site,
-      locale,
-      ogImageUrl: ogImage,
-      twitterCard,
-      twitterSite: tw,
-    }
-  }
-
-  return {
-    title: t.seo.defaultTitle,
-    description: t.seo.defaultDescription,
-    canonicalUrl: getCanonicalUrlForPath('/'),
-    ogUrl: getCanonicalUrlForPath('/'),
+  const base = (partial: Partial<PageSeoPayload> & Pick<PageSeoPayload, 'title' | 'description' | 'canonicalUrl'>): PageSeoPayload => ({
     robots: 'index, follow',
     siteName: site,
     locale,
     ogImageUrl: ogImage,
     twitterCard,
     twitterSite: tw,
+    ogUrl: partial.ogUrl ?? partial.canonicalUrl,
+    ...partial,
+  })
+
+  if (isHomePath(pathname)) {
+    const hl = homeLocaleFromPath(pathname)
+    const pathForCanonical = SEO_PAGE_DEFINITIONS.home.paths[hl]
+    const pageCanonical = getCanonicalUrlForPath(pathForCanonical)
+    return base({
+      title: t.seo.landingTitle,
+      description: t.seo.landingDescription,
+      canonicalUrl: pageCanonical,
+      hreflangAlternates: buildHreflangAlternates('home'),
+    })
+  }
+
+  if (pathname === '/builder') {
+    const pageCanonical = getCanonicalUrlForPath(pathname)
+    return base({
+      title: `${t.seo.workspaceTitle} · ${site}`,
+      description: t.seo.workspaceDescription,
+      canonicalUrl: pageCanonical,
+      hreflangAlternates: [],
+    })
+  }
+
+  const resolved = resolveSeoPageFromPathname(pathname)
+  if (resolved && resolved.pageId !== 'home') {
+    const { pageId, locale: pageLocale } = resolved
+    const def = SEO_PAGE_DEFINITIONS[pageId]
+    const meta = def.meta[pageLocale]
+    const pageCanonical = getCanonicalUrlForPath(def.paths[pageLocale])
+    return base({
+      title: meta.title,
+      description: meta.description,
+      canonicalUrl: pageCanonical,
+      ogType: def.schema === 'article' ? 'article' : undefined,
+      hreflangAlternates: buildHreflangAlternates(pageId),
+    })
+  }
+
+  const legal = getLegalRouteFromPath(pathname)
+  if (legal) {
+    const { title, description } = legalPageCopy(legal, t)
+    const pageCanonical = getCanonicalUrlForPath(pathname)
+    return base({
+      title: `${title} · ${site}`,
+      description,
+      canonicalUrl: pageCanonical,
+      hreflangAlternates: [],
+    })
+  }
+
+  return base({
+    title: t.seo.defaultTitle,
+    description: t.seo.defaultDescription,
+    canonicalUrl: getCanonicalUrlForPath('/'),
+    ogUrl: getCanonicalUrlForPath('/'),
+    hreflangAlternates: [],
+  })
+}
+
+function buildHomepageFaqPageLd(originHome: string): {
+  '@type': 'FAQPage'
+  '@id': string
+  mainEntity: Array<{
+    '@type': 'Question'
+    name: string
+    acceptedAnswer: { '@type': 'Answer'; text: string }
+  }>
+} {
+  return {
+    '@type': 'FAQPage',
+    '@id': `${originHome}#faq`,
+    mainEntity: HOMEPAGE_FAQ_ITEMS.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  }
+}
+
+function websiteNode(t: TranslationMessages, originHome: string) {
+  return {
+    '@type': 'WebSite',
+    '@id': `${originHome}#website`,
+    name: seoConstants.productName,
+    url: originHome,
+    description: t.seo.defaultDescription,
+    inLanguage: ['en', 'da'],
+  }
+}
+
+function buildSeoPageJsonLd(pageId: SeoPageId, locale: SeoLocale, t: TranslationMessages): unknown {
+  const def = SEO_PAGE_DEFINITIONS[pageId]
+  const path = def.paths[locale]
+  const pageUrl = getCanonicalUrlForPath(path)
+  const meta = def.meta[locale]
+  const originHome = getCanonicalUrlForPath('/')
+
+  const graphBase: unknown[] = [
+    websiteNode(t, originHome),
+    def.schema === 'article'
+      ? {
+          '@type': 'Article',
+          '@id': pageUrl,
+          headline: meta.headline ?? meta.title.replace(/\s*\|\s*FakturaLyn\s*$/, ''),
+          description: meta.description,
+          url: pageUrl,
+          isPartOf: { '@id': `${originHome}#website` },
+        }
+      : {
+          '@type': 'WebPage',
+          '@id': pageUrl,
+          name: meta.pageName ?? meta.title.replace(/\s*\|\s*FakturaLyn\s*$/, ''),
+          description: meta.description,
+          url: pageUrl,
+          isPartOf: { '@id': `${originHome}#website` },
+        },
+  ]
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graphBase,
   }
 }
 
 function buildJsonLd(props: SeoManagerProps & { pathname: string }): unknown | null {
-  const { pathname, t } = props
+  const { pathname, t, language } = props
   const originHome = getCanonicalUrlForPath('/')
   const name = seoConstants.productName
-  const siteDescription = t.seo.defaultDescription
 
-  if (pathname === '/') {
+  if (isHomePath(pathname)) {
+    const graph: unknown[] = [
+      {
+        '@type': 'SoftwareApplication',
+        name,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'DKK',
+        },
+        description: t.seo.landingDescription,
+        url: originHome,
+      },
+    ]
+    if (language === 'da' && homeLocaleFromPath(pathname) === 'da') {
+      graph.push(buildHomepageFaqPageLd(originHome))
+    }
     return {
       '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'WebSite',
-          '@id': `${originHome}#website`,
-          name,
-          url: originHome,
-          description: t.seo.landingDescription,
-          inLanguage: ['en', 'da'],
-        },
-        {
-          '@type': 'SoftwareApplication',
-          name,
-          applicationCategory: 'BusinessApplication',
-          operatingSystem: 'Web',
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'DKK',
-          },
-          description: t.seo.landingDescription,
-          url: originHome,
-        },
-      ],
+      '@graph': graph,
     }
+  }
+
+  const resolved = resolveSeoPageFromPathname(pathname)
+  if (resolved && resolved.pageId !== 'home') {
+    return buildSeoPageJsonLd(resolved.pageId, resolved.locale, t)
   }
 
   const legal = getLegalRouteFromPath(pathname)
@@ -151,14 +236,7 @@ function buildJsonLd(props: SeoManagerProps & { pathname: string }): unknown | n
     return {
       '@context': 'https://schema.org',
       '@graph': [
-        {
-          '@type': 'WebSite',
-          '@id': `${originHome}#website`,
-          name,
-          url: originHome,
-          description: siteDescription,
-          inLanguage: ['en', 'da'],
-        },
+        websiteNode(t, originHome),
         {
           '@type': 'WebPage',
           '@id': pageUrl,

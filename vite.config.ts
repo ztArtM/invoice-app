@@ -11,7 +11,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const siteUrl = (env.VITE_SITE_URL || 'https://yourdomain.com').replace(/\/$/, '')
+  // Do not hardcode production origins in repo defaults.
+  // For local builds, fall back to the Vite dev origin; for production, set VITE_SITE_URL explicitly.
+  const siteUrl = (env.VITE_SITE_URL || 'http://localhost:5173').replace(/\/$/, '')
 
   let outDir = 'dist'
 

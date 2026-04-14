@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Include root index.html so utility classes used in static SEO prerender are generated */
+@source '../index.html';
+
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   /* Brand blue (primary) — aligned with logo wordmark */

@@ -21,9 +21,36 @@ export type SitemapUrlEntry = {
   priority: number
 }
 
-/** Canonical indexable paths (no `#` fragments). */
+/**
+ * Canonical indexable paths (no `#` fragments).
+ * Built into `dist/sitemap.xml` at bundle time (`vite.config.ts`).
+ * SEO paths included: marketing landings + article guides below + `/builder` + legal.
+ */
 export const PUBLIC_SITEMAP_ENTRIES: SitemapUrlEntry[] = [
   { path: '/', changefreq: 'weekly', priority: 1.0 },
+  { path: '/en/', changefreq: 'weekly', priority: 1.0 },
+  { path: '/gratis-faktura-program', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/free-invoice-software', changefreq: 'monthly', priority: 0.85 },
+  { path: '/lav-faktura-online', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/create-invoice-online', changefreq: 'monthly', priority: 0.85 },
+  { path: '/faktura-skabelon', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/invoice-template', changefreq: 'monthly', priority: 0.85 },
+  { path: '/gratis-faktura-skabelon', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/free-invoice-template', changefreq: 'monthly', priority: 0.85 },
+  { path: '/hvordan-laver-man-en-faktura', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/how-to-make-an-invoice', changefreq: 'monthly', priority: 0.85 },
+  { path: '/hvad-skal-en-faktura-indeholde', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/what-should-an-invoice-include', changefreq: 'monthly', priority: 0.85 },
+  { path: '/faktura-uden-cvr', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/invoice-without-cvr', changefreq: 'monthly', priority: 0.85 },
+  { path: '/faktura-til-freelancer', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/invoice-for-freelancers', changefreq: 'monthly', priority: 0.85 },
+  { path: '/tilbud-skabelon', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/quote-template', changefreq: 'monthly', priority: 0.85 },
+  { path: '/tilbud-vs-faktura', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/quote-vs-invoice', changefreq: 'monthly', priority: 0.85 },
+  { path: '/faktura-skabelon-vs-online-faktura-program', changefreq: 'monthly', priority: 0.85 },
+  { path: '/en/invoice-template-vs-online-invoicing', changefreq: 'monthly', priority: 0.85 },
   { path: '/builder', changefreq: 'weekly', priority: 0.9 },
   { path: '/privacy', changefreq: 'yearly', priority: 0.6 },
   { path: '/terms', changefreq: 'yearly', priority: 0.6 },
@@ -77,11 +104,12 @@ export function buildSitemapXml(options: {
     if (seen.has(loc)) continue
     seen.add(loc)
     const priority = Math.min(1, Math.max(0, e.priority))
+    const priorityOut = (Math.round(priority * 100) / 100).toFixed(2).replace(/\.?0+$/, '') || '0'
     lines.push(`  <url>`)
     lines.push(`    <loc>${escapeXmlText(loc)}</loc>`)
     lines.push(`    <lastmod>${escapeXmlText(lastmod)}</lastmod>`)
     lines.push(`    <changefreq>${e.changefreq}</changefreq>`)
-    lines.push(`    <priority>${priority.toFixed(1)}</priority>`)
+    lines.push(`    <priority>${priorityOut}</priority>`)
     lines.push(`  </url>`)
   }
 
