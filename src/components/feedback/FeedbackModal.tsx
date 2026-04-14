@@ -100,6 +100,7 @@ export function FeedbackModal({ open, onClose, embedUrl, shareUrl, t }: Feedback
               src={embedUrl}
               className="h-[min(78dvh,720px)] w-full border-0 bg-white sm:h-[min(72dvh,680px)]"
               loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           ) : (
             <div className="px-4 py-8 text-center text-sm leading-relaxed text-zinc-600 sm:px-6">

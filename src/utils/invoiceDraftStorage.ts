@@ -18,10 +18,12 @@ function isPartyContactBase(value: unknown): value is { name: string; email: str
   return isString(party.name) && isString(party.email) && isString(party.address)
 }
 
-/** Seller: accepts `sellerCvrNumber` or legacy `cvr`. */
+/** Seller: accepts `sellerCvrNumber` or legacy `cvr`; may omit `sellerType`. */
 function isSellerPartyLoose(value: unknown): boolean {
   if (!isPartyContactBase(value)) return false
   const party = value as Record<string, unknown>
+  const st = party.sellerType
+  if (st !== undefined && st !== 'privatePerson' && st !== 'company') return false
   const cvrField = party.sellerCvrNumber ?? party.cvr
   if (cvrField !== undefined && !isString(cvrField)) return false
   return true
@@ -145,6 +147,9 @@ function isValidInvoiceDocumentShape(data: unknown): data is InvoiceDocument {
 function finalizeParties(doc: InvoiceDocument): InvoiceDocument {
   const s = doc.seller
   const c = doc.client
+  const rawSellerType = (s as { sellerType?: string }).sellerType
+  const sellerType: InvoiceDocument['seller']['sellerType'] =
+    rawSellerType === 'privatePerson' ? 'privatePerson' : 'company'
   const sellerRecord = s as { sellerCvrNumber?: string; cvr?: string }
   const sellerCvrRaw =
     typeof sellerRecord.sellerCvrNumber === 'string'
@@ -171,13 +176,13 @@ function finalizeParties(doc: InvoiceDocument): InvoiceDocument {
       ? (c as { countryCodeOverride: string }).countryCodeOverride
       : ''
 
-  const sellerCvrDigits = normalizeCvrInput(sellerCvrRaw)
+  const sellerCvrDigits = sellerType === 'company' ? normalizeCvrInput(sellerCvrRaw) : ''
   const clientCvrDigits = clientType === 'company' ? normalizeCvrInput(clientCvrRaw) : ''
 
   const rawSellerVat = typeof (s as { vatNumber?: unknown }).vatNumber === 'string' ? (s as { vatNumber: string }).vatNumber : ''
   const rawClientVat = typeof (c as { vatNumber?: unknown }).vatNumber === 'string' ? (c as { vatNumber: string }).vatNumber : ''
 
-  const sellerVatNumber = formatVatNumber(sellerCountryCode, rawSellerVat, sellerCvrDigits)
+  const sellerVatNumber = sellerType === 'company' ? formatVatNumber(sellerCountryCode, rawSellerVat, sellerCvrDigits) : ''
   const clientVatNumber = formatVatNumber(clientCountryCode, rawClientVat, clientCvrDigits)
 
   const invoiceType = determineInvoiceType({
@@ -186,10 +191,13 @@ function finalizeParties(doc: InvoiceDocument): InvoiceDocument {
       clientCountryCode.trim().toUpperCase() === 'OTHER' ? clientCountryCodeOverride : clientCountryCode,
     buyerIsBusiness: clientType === 'company',
   })
-  const effectiveVatRatePercent = determineVatRatePercent({
-    invoiceType,
-    domesticVatRatePercent: doc.vat.ratePercent,
-  })
+  const effectiveVatRatePercent =
+    sellerType === 'privatePerson'
+      ? 0
+      : determineVatRatePercent({
+          invoiceType,
+          domesticVatRatePercent: doc.vat.ratePercent,
+        })
 
   return {
     ...doc,
@@ -200,6 +208,7 @@ function finalizeParties(doc: InvoiceDocument): InvoiceDocument {
       name: s.name,
       email: s.email,
       address: s.address,
+      sellerType,
       sellerCvrNumber: sellerCvrDigits,
       countryCode: sellerCountryCode.trim().toUpperCase() || 'DK',
       vatNumber: sellerVatNumber,

@@ -351,11 +351,12 @@ function buildInvoicePdfDocument(
   moveDown(SECTION_TOP_MARGIN_MM)
 
   // ----- Totals (right-aligned card; height grows with wrapped labels / huge amounts) -----
-  const totalsBlockW = 84
+  // Wide enough that typical DA/EN labels (e.g. "Subtotal (ekskl. moms)") stay on one line with the amount.
+  const totalsBlockW = 110
   const totalsBlockLeftMm = contentRightMm - totalsBlockW
   const totPad = 5
-  const labelMaxW = Math.max(18, totalsBlockW - totPad * 2 - 40)
-  const amountMaxW = 38
+  const amountMaxW = 40
+  const labelMaxW = Math.max(28, totalsBlockW - totPad * 2 - amountMaxW - 3)
 
   const subtotalLabel = tot.subtotalExVat
   const vatLabel = tot.vatWithPercent.replace(
@@ -592,6 +593,7 @@ function buildSellerPdfLines(
   p: TranslationMessages['preview'],
 ): string[] {
   const lines = buildContactLines(seller)
+  if (seller.sellerType !== 'company') return lines
   if (invoiceType === 'domestic_dk') {
     const sellerCvr = seller.sellerCvrNumber.trim()
     if (sellerCvr) lines.push(`${p.cvrLabel}: ${sellerCvr}`)

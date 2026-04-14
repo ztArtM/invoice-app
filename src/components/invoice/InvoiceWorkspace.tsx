@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { createDefaultInvoiceDocument } from '../../constants/defaultInvoiceDocument'
+import { createDefaultInvoiceDocument, createExampleInvoiceDocument } from '../../constants/defaultInvoiceDocument'
 import { normalizeInvoiceCurrency, type SupportedCurrencyCode } from '../../constants/localization'
 import type { Language, TranslationMessages } from '../../constants/translations'
 import type { InvoiceDocument, SetInvoiceDocument } from '../../types/invoiceDocument'
@@ -74,6 +74,10 @@ export function InvoiceWorkspace({
     }
   }
 
+  const handleTryExampleClick = () => {
+    setInvoiceDocument(normalizeInvoiceCurrency(createExampleInvoiceDocument()))
+  }
+
   const gettingStartedTips = getGettingStartedTips(invoiceDocument, t.gettingStarted)
 
   return (
@@ -113,6 +117,9 @@ export function InvoiceWorkspace({
                 role="group"
                 aria-label={t.workspace.documentActionsAriaLabel}
               >
+                <button type="button" className={secondaryButtonClassName} onClick={handleTryExampleClick}>
+                  {t.workspace.tryExample}
+                </button>
                 <button
                   type="button"
                   className={secondaryButtonClassName}

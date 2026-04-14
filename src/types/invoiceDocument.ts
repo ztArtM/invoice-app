@@ -49,8 +49,12 @@ export interface PartyContact {
   address: string
 }
 
+/** Party type: private individual vs company (CVR only for companies). */
+export type PartyType = 'privatePerson' | 'company'
+
 /** Seller (you): keep CVR for Denmark; add VAT ID + country for EU invoices. */
 export interface SellerParty extends PartyContact {
+  sellerType: PartyType
   /** Danish Central Business Register no. (8 digits); optional. Stored as digits only. */
   sellerCvrNumber: string
   /** ISO 3166-1 alpha-2. Defaults to DK. */
@@ -60,7 +64,7 @@ export interface SellerParty extends PartyContact {
 }
 
 /** Client type: private individual vs company (CVR only for companies). */
-export type ClientType = 'privatePerson' | 'company'
+export type ClientType = PartyType
 
 /** Client / bill-to party. */
 export interface ClientParty extends PartyContact {

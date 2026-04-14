@@ -94,13 +94,17 @@ export function InvoicePreview({
           <div className="mt-3">
             <PreviewAddress value={invoiceDocument.seller.address} />
           </div>
-          {invoiceDocument.invoiceType === 'domestic_dk' && invoiceDocument.seller.sellerCvrNumber.trim() ? (
+          {invoiceDocument.seller.sellerType === 'company' &&
+          invoiceDocument.invoiceType === 'domestic_dk' &&
+          invoiceDocument.seller.sellerCvrNumber.trim() ? (
             <p className="mt-2 min-w-0 break-all text-xs text-zinc-600 [overflow-wrap:anywhere]">
               <span className="font-medium text-zinc-700">{sellerIdLabel}:</span>{' '}
               <span className="tabular-nums">{invoiceDocument.seller.sellerCvrNumber.trim()}</span>
             </p>
           ) : null}
-          {invoiceDocument.invoiceType !== 'domestic_dk' && invoiceDocument.seller.vatNumber.trim() ? (
+          {invoiceDocument.seller.sellerType === 'company' &&
+          invoiceDocument.invoiceType !== 'domestic_dk' &&
+          invoiceDocument.seller.vatNumber.trim() ? (
             <p className="mt-2 min-w-0 break-all text-xs text-zinc-600 [overflow-wrap:anywhere]">
               <span className="font-medium text-zinc-700">{sellerIdLabel}:</span>{' '}
               <span className="tabular-nums">{invoiceDocument.seller.vatNumber.trim()}</span>

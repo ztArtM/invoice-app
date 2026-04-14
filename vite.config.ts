@@ -11,9 +11,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  // Do not hardcode production origins in repo defaults.
-  // For local builds, fall back to the Vite dev origin; for production, set VITE_SITE_URL explicitly.
-  const siteUrl = (env.VITE_SITE_URL || 'http://localhost:5173').replace(/\/$/, '')
+  const viteSiteUrl = env.VITE_SITE_URL?.trim()
+  // Sitemap/robots are generated at build time; they must use your public origin when set.
+  // Local `vite build` without .env falls back to the dev origin so artifacts remain buildable.
+  const siteUrl = (viteSiteUrl || 'http://localhost:5173').replace(/\/$/, '')
 
   let outDir = 'dist'
 
@@ -27,6 +28,20 @@ export default defineConfig(({ mode }) => {
           outDir = config.build.outDir
         },
         closeBundle() {
+          if (mode === 'production' && !viteSiteUrl) {
+            const lines = [
+              '[vite][seo] Production build: VITE_SITE_URL is not set.',
+              '  dist/sitemap.xml and dist/robots.txt will use http://localhost:5173 as the site origin.',
+              '  Set VITE_SITE_URL in your hosting env (e.g. Vercel) or .env.production — see .env.example.',
+            ]
+            console.warn(`\n${lines.join('\n')}\n`)
+            const ci = process.env.CI === 'true' || process.env.CI === '1'
+            if (ci) {
+              throw new Error(
+                '[vite][seo] Refusing to emit sitemap/robots with a localhost origin in CI. Set VITE_SITE_URL.',
+              )
+            }
+          }
           const out = resolve(__dirname, outDir)
           const sitemap = buildSitemapXml({ siteUrl })
           const robots = `User-agent: *

@@ -34,6 +34,7 @@ export const invoiceOverflowTestDocument: InvoiceDocument = {
     name: `Seller ${LONG_WORD}`,
     email: 'seller@example.com',
     address: ['Line one with normal words.', `Street ${UNBROKEN}`, 'City'].join('\n'),
+    sellerType: 'company',
     sellerCvrNumber: '12345678',
     countryCode: 'DK',
     vatNumber: `DK${UNBROKEN.slice(0, 40)}`,

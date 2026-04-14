@@ -36,6 +36,54 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/**
+ * Hero mock preview: keep numbers on one line.
+ * The real invoice preview intentionally allows breaking to avoid overlap in tight layouts/print.
+ */
+.hero-invoice-preview .invoice-table-print-col-num {
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
+}
+
+.hero-invoice-preview .invoice-table-print {
+  font-size: 0.8125rem; /* ~13px */
+}
+
+.hero-invoice-preview .invoice-table-print th {
+  font-size: 0.6875rem; /* ~11px */
+}
+
+/* Hero totals: keep grand total on one line without losing bold emphasis */
+.hero-totals-summary .text-lg {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.hero-totals-summary dd {
+  white-space: nowrap;
+}
+
+/* Trust example: same no-wrap treatment, but scoped to that block */
+.trust-invoice-preview .invoice-table-print-col-num {
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
+}
+
+.trust-invoice-preview .invoice-table-print {
+  font-size: 0.8125rem;
+}
+
+.trust-totals-summary .text-lg {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.trust-totals-summary dd {
+  white-space: nowrap;
+}
+
 @media print {
   body {
     background: #fff;

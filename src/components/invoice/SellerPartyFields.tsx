@@ -1,8 +1,9 @@
 import type { ChangeEvent } from 'react'
 import { CompanyCvrLookup } from '../CompanyCvrLookup'
 import type { TranslationMessages } from '../../constants/translations'
-import type { InvoiceDocument, PartyContact, SetInvoiceDocument } from '../../types/invoiceDocument'
+import type { InvoiceDocument, PartyContact, SetInvoiceDocument, SellerParty } from '../../types/invoiceDocument'
 import { formatVatNumber } from '../../services/invoicing/invoiceRules'
+import { formLabelClassName, formSelectClassName } from './formFieldClassNames'
 import { FormTextArea } from './FormTextArea'
 import { FormTextField } from './FormTextField'
 
@@ -25,6 +26,24 @@ export function SellerPartyFields({ t, invoiceDocument, setInvoiceDocument }: Se
       }))
     }
 
+  const handleSellerTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const sellerType = event.target.value as SellerParty['sellerType']
+    setInvoiceDocument((previous) => ({
+      ...previous,
+      seller: {
+        ...previous.seller,
+        sellerType,
+        sellerCvrNumber: sellerType === 'privatePerson' ? '' : previous.seller.sellerCvrNumber,
+        vatNumber: sellerType === 'privatePerson' ? '' : previous.seller.vatNumber,
+      },
+      // Requirement: private seller → VAT set to 0%
+      vat: {
+        ...previous.vat,
+        ratePercent: sellerType === 'privatePerson' ? 0 : previous.vat.ratePercent,
+      },
+    }))
+  }
+
   const handleSellerCvrDigitsChange = (digits: string) => {
     setInvoiceDocument((previous) => ({
       ...previous,
@@ -36,14 +55,33 @@ export function SellerPartyFields({ t, invoiceDocument, setInvoiceDocument }: Se
     }))
   }
 
+  const isCompany = seller.sellerType === 'company'
+
   return (
     <>
-      <CompanyCvrLookup
-        formMessages={fm}
-        cvrNumber={seller.sellerCvrNumber}
-        onCvrDigitsChange={handleSellerCvrDigitsChange}
-        idPrefix="seller"
-      />
+      <div>
+        <label htmlFor="seller-type" className={formLabelClassName}>
+          {fm.sellerTypeLabel}
+        </label>
+        <select
+          id="seller-type"
+          className={formSelectClassName}
+          value={seller.sellerType}
+          onChange={handleSellerTypeChange}
+        >
+          <option value="privatePerson">{fm.sellerTypePrivate}</option>
+          <option value="company">{fm.sellerTypeCompany}</option>
+        </select>
+      </div>
+
+      {isCompany ? (
+        <CompanyCvrLookup
+          formMessages={fm}
+          cvrNumber={seller.sellerCvrNumber}
+          onCvrDigitsChange={handleSellerCvrDigitsChange}
+          idPrefix="seller"
+        />
+      ) : null}
       <FormTextField
         id="seller-name"
         label={fm.businessOrYourName}

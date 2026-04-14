@@ -1,8 +1,14 @@
 import { appMeta } from './appMeta'
 
 /**
- * Canonical site URL for Open Graph, Twitter, sitemap, and JSON-LD.
- * Set `VITE_SITE_URL` in production (e.g. https://example.com — no trailing slash).
+ * Canonical site origin for Open Graph, Twitter, JSON-LD, and hreflang/canonical URLs.
+ *
+ * Resolution order:
+ * 1. `VITE_SITE_URL` from the build (set in production deploys) — stable in the bundle.
+ * 2. In the browser when unset: `window.location.origin` — matches the live host (fine for deployed SPA).
+ * 3. Last resort (tests / non-browser): `http://localhost:5173` — not used for real users in production.
+ *
+ * Set `VITE_SITE_URL` in hosting (no trailing slash) so build-time metadata and `dist/sitemap.xml` stay aligned.
  */
 export function getSiteOrigin(): string {
   const raw = import.meta.env.VITE_SITE_URL?.trim()

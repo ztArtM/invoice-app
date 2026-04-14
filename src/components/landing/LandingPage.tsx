@@ -3,6 +3,8 @@ import { BenefitsSection } from './BenefitsSection'
 import { FeaturesSection } from './FeaturesSection'
 import { FinalCtaSection } from './FinalCtaSection'
 import { HeroSection } from './HeroSection'
+import { HomepageThreeStepsSection } from './HomepageThreeStepsSection'
+import { HomepageTrustLayerSection } from './HomepageTrustLayerSection'
 import { HowItWorksSection } from './HowItWorksSection'
 import { LandingFooter } from './LandingFooter'
 import { LandingNav } from './LandingNav'
@@ -16,6 +18,7 @@ export interface LandingPageProps {
   onLanguageChange: (language: Language) => void
   /** Opens the invoice builder (same session; optional persistence handled by parent). */
   onStartApp: () => void
+  onStartExample?: () => void
   t: TranslationMessages
 }
 
@@ -23,7 +26,7 @@ export interface LandingPageProps {
  * Marketing landing: navigation + ordered sections + footer.
  * Copy lives in `translations[language].landing`; subcomponents only handle layout.
  */
-export function LandingPage({ language, onLanguageChange, onStartApp, t }: LandingPageProps) {
+export function LandingPage({ language, onLanguageChange, onStartApp, onStartExample, t }: LandingPageProps) {
   const skipLabel = t.landing.skipToContent
 
   return (
@@ -41,7 +44,9 @@ export function LandingPage({ language, onLanguageChange, onStartApp, t }: Landi
         t={t}
       />
       <main id="landing-main">
-        <HeroSection onStartApp={onStartApp} t={t} />
+        <HeroSection onStartApp={onStartApp} onStartExample={onStartExample} t={t} />
+        <HomepageThreeStepsSection t={t} />
+        <HomepageTrustLayerSection t={t} />
         <SeoHomepageContentSection t={t} />
         {language === 'da' ? <HomepageFaqSection /> : null}
         <BenefitsSection t={t} />

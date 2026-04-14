@@ -20,6 +20,10 @@ dist-ssr
 .env.*
 !.env.example
 
+# Keys / certs (never commit)
+*.pem
+*.key
+
 # Coverage / test artifacts
 coverage
 .nyc_output

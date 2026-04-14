@@ -6,7 +6,7 @@ import { PdfSurveyMobileBanner } from './components/feedback/PdfSurveyMobileBann
 import { LandingPage } from './components/landing/LandingPage'
 import { InvoiceWorkspace } from './components/invoice/InvoiceWorkspace'
 import { HashToPathRedirect } from './components/routing/HashToPathRedirect'
-import { createDefaultInvoiceDocument } from './constants/defaultInvoiceDocument'
+import { createDefaultInvoiceDocument, createExampleInvoiceDocument } from './constants/defaultInvoiceDocument'
 import {
   getLocaleForLanguage,
   normalizeInvoiceCurrency,
@@ -257,6 +257,24 @@ function App() {
     navigate('/builder')
   }
 
+  const openBuilderWithExample = () => {
+    try {
+      sessionStorage.setItem(APP_PHASE_STORAGE_KEY, 'app')
+    } catch {
+      /* ignore */
+    }
+    navigate('/builder?example=1')
+  }
+
+  useEffect(() => {
+    if (normalizeSeoPathname(location.pathname) !== '/builder') return
+    const params = new URLSearchParams(location.search)
+    if (params.get('example') !== '1') return
+    setInvoiceDocument(normalizeInvoiceCurrency(createExampleInvoiceDocument()))
+    // Clean up URL so reloads do not keep reapplying the example.
+    navigate('/builder', { replace: true })
+  }, [location.pathname, location.search, navigate])
+
   const clearLocalData = () => {
     if (
       !window.confirm(
@@ -288,6 +306,7 @@ function App() {
               language={language}
               onLanguageChange={handleLanguageChange}
               onStartApp={openBuilder}
+              onStartExample={openBuilderWithExample}
               t={t}
             />
           }
@@ -300,6 +319,7 @@ function App() {
               language={language}
               onLanguageChange={handleLanguageChange}
               onStartApp={openBuilder}
+              onStartExample={openBuilderWithExample}
               t={t}
             />
           }

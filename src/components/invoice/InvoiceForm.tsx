@@ -82,7 +82,7 @@ export function InvoiceForm({
         reverseCharge: t.form.taxNoteReverseCharge,
         exportOutsideScope: t.form.taxNoteExportOutsideScope,
       })
-      const nextVatRate = effectiveVatRatePercent
+      const nextVatRate = previous.seller.sellerType === 'privatePerson' ? 0 : effectiveVatRatePercent
       const changed =
         previous.invoiceType !== invoiceType ||
         previous.taxNote !== taxNote ||
@@ -106,6 +106,7 @@ export function InvoiceForm({
     t.form.taxNoteReverseCharge,
     t.form.taxNoteExportOutsideScope,
     invoiceDocument.seller.countryCode,
+    invoiceDocument.seller.sellerType,
     invoiceDocument.seller.sellerCvrNumber,
     invoiceDocument.seller.vatNumber,
     invoiceDocument.client.countryCode,
