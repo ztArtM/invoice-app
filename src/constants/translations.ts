@@ -267,6 +267,10 @@ export const translations = {
       resetDraftConfirm:
         'Clear this invoice and start over? Your current draft will be replaced (this browser only).',
       documentActionsAriaLabel: 'Copy or reset your draft',
+      mobilePreviewOpen: 'Preview',
+      mobilePreviewClose: 'Close',
+      mobilePreviewOpenAriaLabel: 'Open preview',
+      mobilePreviewCloseAriaLabel: 'Close preview',
     },
     gettingStarted: {
       bannerTitle: 'Finish your document',
@@ -667,6 +671,10 @@ export const translations = {
       resetDraftConfirm:
         'Ryd denne faktura og start forfra? Din nuværende kladde erstattes (kun i denne browser).',
       documentActionsAriaLabel: 'Kopier eller nulstil din kladde',
+      mobilePreviewOpen: 'Forhåndsvis',
+      mobilePreviewClose: 'Luk',
+      mobilePreviewOpenAriaLabel: 'Åbn forhåndsvisning',
+      mobilePreviewCloseAriaLabel: 'Luk forhåndsvisning',
     },
     gettingStarted: {
       bannerTitle: 'Færdiggør dit dokument',

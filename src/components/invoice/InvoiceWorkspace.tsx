@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createDefaultInvoiceDocument, createExampleInvoiceDocument } from '../../constants/defaultInvoiceDocument'
 import { normalizeInvoiceCurrency, type SupportedCurrencyCode } from '../../constants/localization'
 import type { Language, TranslationMessages } from '../../constants/translations'
@@ -45,12 +45,36 @@ export function InvoiceWorkspace({
   setInvoiceDocument,
 }: InvoiceWorkspaceProps) {
   const [pdfErrorMessage, setPdfErrorMessage] = useState<string | null>(null)
+  const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false)
+  const mobilePreviewCloseButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (pdfErrorMessage === null) return
     const timerId = window.setTimeout(() => setPdfErrorMessage(null), 8000)
     return () => window.clearTimeout(timerId)
   }, [pdfErrorMessage])
+
+  useEffect(() => {
+    if (!mobilePreviewOpen) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    mobilePreviewCloseButtonRef.current?.focus()
+    return () => {
+      document.body.style.overflow = prevOverflow
+    }
+  }, [mobilePreviewOpen])
+
+  useEffect(() => {
+    if (!mobilePreviewOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        setMobilePreviewOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [mobilePreviewOpen])
 
   const handleDownloadPdfClick = () => {
     setPdfErrorMessage(null)
@@ -214,6 +238,55 @@ export function InvoiceWorkspace({
           </div>
         </div>
       </main>
+
+      {/* Mobile: floating quick preview (avoid scrolling down to the preview section) */}
+      {!mobilePreviewOpen ? (
+        <button
+          type="button"
+          className="fixed bottom-4 right-4 z-[90] inline-flex items-center justify-center rounded-full bg-zinc-900 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-zinc-900/25 ring-1 ring-white/10 lg:hidden print:hidden"
+          onClick={() => setMobilePreviewOpen(true)}
+          aria-label={t.workspace.mobilePreviewOpenAriaLabel}
+        >
+          {t.workspace.mobilePreviewOpen}
+        </button>
+      ) : null}
+
+      {mobilePreviewOpen ? (
+        <div className="fixed inset-0 z-[100] lg:hidden print:hidden" role="dialog" aria-modal="true">
+          {/* Backdrop (always closes) */}
+          <button
+            type="button"
+            className="absolute inset-0 bg-zinc-900/40 backdrop-blur-[1px]"
+            aria-label={t.workspace.mobilePreviewCloseAriaLabel}
+            onClick={() => setMobilePreviewOpen(false)}
+          />
+
+          {/* Scroll container */}
+          <div className="relative h-full overflow-y-auto p-3 sm:p-4">
+            <div className="mx-auto w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+              <div className="sticky top-0 z-10 mb-3 flex justify-end">
+                <button
+                  ref={mobilePreviewCloseButtonRef}
+                  type="button"
+                  className="rounded-lg border border-zinc-200 bg-white/95 px-3 py-2 text-sm font-medium text-zinc-800 shadow-sm transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+                  onClick={() => setMobilePreviewOpen(false)}
+                >
+                  {t.workspace.mobilePreviewClose}
+                </button>
+              </div>
+
+              <div className="rounded-xl bg-white p-2 shadow-xl shadow-zinc-900/10 ring-1 ring-zinc-950/[0.04]">
+                <InvoicePreview
+                  t={t}
+                  localeForFormatting={localeForFormatting}
+                  activeCurrencyCode={activeCurrencyCode}
+                  invoiceDocument={invoiceDocument}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
