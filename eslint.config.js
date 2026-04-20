@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'coverage', '.vite', '**/*.tsbuildinfo']),
   {
     files: ['scripts/**/*.ts', 'vite.config.ts'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -27,6 +27,13 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+  },
+  {
+    files: ['src/App.tsx'],
+    rules: {
+      /** URL → state sync for SEO locale + ?example= is intentional; not arbitrary cascading setState. */
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])

@@ -6,13 +6,11 @@ const APP_VERSION = import.meta.env.VITE_APP_VERSION?.trim() || '0.0.0'
 const TALLY_EMBED_BASE = 'https://tally.so/embed'
 const TALLY_SHARE_BASE = 'https://tally.so/r'
 
-/** Default form ids (can be overridden by env). */
-const DEFAULT_TALLY_FEEDBACK_FORM_EN = 'XxY4d4'
-const DEFAULT_TALLY_FEEDBACK_FORM_DA = 'ODY7qK'
-
-/** Shown after “Save as PDF” (header Feedback uses general forms above). */
-const PDF_DOWNLOAD_TALLY_FORM_EN = 'ODYy1g'
-const PDF_DOWNLOAD_TALLY_FORM_DA = '818515'
+/** Default Tally form ids — override via `VITE_TALLY_*` env vars (`parseTallyFormRef`). */
+const TALLY_FORM_DEFAULTS = {
+  feedback: { en: 'XxY4d4', da: 'ODY7qK' },
+  pdfDownload: { en: 'ODYy1g', da: '818515' },
+} as const
 
 /**
  * Extracts the Tally form id from a full URL (`.../r/xyz`, `.../embed/xyz`) or returns a bare id.
@@ -33,9 +31,9 @@ export function parseTallyFormRef(raw: string | undefined): string | null {
  */
 export function getTallyFormIdForLanguage(lang: Language): string | null {
   const idEn =
-    parseTallyFormRef(import.meta.env.VITE_TALLY_FEEDBACK_FORM_EN) ?? DEFAULT_TALLY_FEEDBACK_FORM_EN
+    parseTallyFormRef(import.meta.env.VITE_TALLY_FEEDBACK_FORM_EN) ?? TALLY_FORM_DEFAULTS.feedback.en
   const idDa =
-    parseTallyFormRef(import.meta.env.VITE_TALLY_FEEDBACK_FORM_DA) ?? DEFAULT_TALLY_FEEDBACK_FORM_DA
+    parseTallyFormRef(import.meta.env.VITE_TALLY_FEEDBACK_FORM_DA) ?? TALLY_FORM_DEFAULTS.feedback.da
   if (lang === 'da') {
     return idDa ?? idEn ?? null
   }
@@ -97,7 +95,7 @@ export function buildTallyFeedbackShareUrl(lang: Language, invoice: InvoiceDocum
 }
 
 function getTallyPdfDownloadFormIdForLanguage(lang: Language): string {
-  return lang === 'da' ? PDF_DOWNLOAD_TALLY_FORM_DA : PDF_DOWNLOAD_TALLY_FORM_EN
+  return lang === 'da' ? TALLY_FORM_DEFAULTS.pdfDownload.da : TALLY_FORM_DEFAULTS.pdfDownload.en
 }
 
 /** Post–PDF-download survey (embed). */
@@ -110,4 +108,14 @@ export function buildTallyPdfDownloadEmbedUrl(lang: Language, invoice: InvoiceDo
 export function buildTallyPdfDownloadShareUrl(lang: Language, invoice: InvoiceDocument): string {
   const id = getTallyPdfDownloadFormIdForLanguage(lang)
   return appendFeedbackParams(`${TALLY_SHARE_BASE}/${encodeURIComponent(id)}`, invoice, lang)
+}
+
+/** True when `url` is a safe https Tally origin (embed / share). */
+export function isAllowedTallyUrl(url: string): boolean {
+  try {
+    const u = new URL(url)
+    return u.protocol === 'https:' && (u.hostname === 'tally.so' || u.hostname === 'www.tally.so')
+  } catch {
+    return false
+  }
 }

@@ -30,7 +30,7 @@ export function PreviewLineItems({
 }: PreviewLineItemsProps) {
   return (
     <>
-      <ul className="space-y-3 sm:hidden print:hidden">
+      <ul className="space-y-2 sm:hidden print:hidden">
         {lineItems.map((lineItem) => {
           const lineAmount = calculateLineItemTotal(lineItem)
           const unitStr = formatCurrencyAmount(
@@ -42,7 +42,7 @@ export function PreviewLineItems({
           return (
             <li
               key={lineItem.id}
-              className="min-w-0 rounded-lg border border-zinc-200/90 bg-white p-4 shadow-sm"
+              className="min-w-0 rounded-lg border border-zinc-200/90 bg-white p-3.5 shadow-sm"
             >
               <p className="min-w-0 text-sm font-medium leading-snug text-zinc-900 [overflow-wrap:anywhere] [word-break:break-word]">
                 <PreviewText value={lineItem.description} />
@@ -65,36 +65,36 @@ export function PreviewLineItems({
       </ul>
 
       <div className="hidden min-w-0 sm:block print:block print:overflow-visible">
-        <table className="invoice-table-print border-collapse text-sm">
+        <table className="invoice-table-print w-full border-collapse text-sm">
           <colgroup>
             <col style={{ width: '46%' }} />
-            <col style={{ width: '12%' }} />
+            <col style={{ width: '11%' }} />
             <col style={{ width: '21%' }} />
-            <col style={{ width: '21%' }} />
+            <col style={{ width: '22%' }} />
           </colgroup>
           <thead>
-            <tr className="border-b-2 border-zinc-900/80 text-left">
+            <tr className="border-b border-zinc-900/20 bg-zinc-100/90 text-left print:border-zinc-400 print:bg-zinc-100">
               <th
                 scope="col"
-                className="min-w-0 py-3 pr-3 text-xs font-semibold uppercase tracking-wide text-zinc-500"
+                className="min-w-0 py-2.5 pl-2 pr-2 align-middle text-[0.7rem] font-semibold tracking-wide text-zinc-600"
               >
                 {thDescription}
               </th>
               <th
                 scope="col"
-                className="invoice-table-print-col-num py-3 pr-2 text-right text-xs font-semibold uppercase tracking-wide text-zinc-500"
+                className="invoice-table-print-col-num py-2.5 pr-2 text-center align-middle text-[0.7rem] font-semibold tracking-wide text-zinc-600"
               >
                 {thQty}
               </th>
               <th
                 scope="col"
-                className="invoice-table-print-col-num py-3 pr-2 text-right text-xs font-semibold uppercase tracking-wide text-zinc-500"
+                className="invoice-table-print-col-num py-2.5 pr-2 text-right align-middle text-[0.7rem] font-semibold tracking-wide text-zinc-600"
               >
                 {thUnitPrice}
               </th>
               <th
                 scope="col"
-                className="invoice-table-print-col-num py-3 pl-1 text-right text-xs font-semibold uppercase tracking-wide text-zinc-500"
+                className="invoice-table-print-col-num py-2.5 pl-1 pr-2 text-right align-middle text-[0.7rem] font-semibold tracking-wide text-zinc-600"
               >
                 {thAmount}
               </th>
@@ -110,20 +110,17 @@ export function PreviewLineItems({
               )
               const lineStr = formatCurrencyAmount(lineAmount, activeCurrencyCode, localeForFormatting)
               return (
-                <tr
-                  key={lineItem.id}
-                  className="border-b border-zinc-100 last:border-b-0 print:border-zinc-200"
-                >
-                  <td className="min-w-0 py-3.5 pr-3 align-top text-zinc-800 [overflow-wrap:anywhere] [word-break:break-word]">
+                <tr key={lineItem.id}>
+                  <td className="min-w-0 py-2.5 pl-2 pr-2 align-top text-sm leading-normal text-zinc-800 [overflow-wrap:anywhere] [word-break:break-word]">
                     <PreviewText value={lineItem.description} />
                   </td>
-                  <td className="invoice-table-print-col-num py-3.5 pr-2 text-right tabular-nums text-zinc-700">
+                  <td className="invoice-table-print-col-num py-2.5 pr-2 text-center text-sm tabular-nums text-zinc-800">
                     {lineItem.quantity}
                   </td>
-                  <td className="invoice-table-print-col-num py-3.5 pr-2 text-right tabular-nums text-zinc-700">
+                  <td className="invoice-table-print-col-num py-2.5 pr-2 text-right text-sm tabular-nums text-zinc-800">
                     {unitStr}
                   </td>
-                  <td className="invoice-table-print-col-num py-3.5 pl-1 text-right tabular-nums font-semibold text-zinc-900">
+                  <td className="invoice-table-print-col-num py-2.5 pl-1 pr-2 text-right text-sm tabular-nums font-semibold text-zinc-900">
                     {lineStr}
                   </td>
                 </tr>

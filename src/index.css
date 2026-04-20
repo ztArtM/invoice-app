@@ -55,6 +55,7 @@ button:focus-visible {
 }
 
 /* Hero totals: keep grand total on one line without losing bold emphasis */
+.hero-totals-summary .text-base,
 .hero-totals-summary .text-lg {
   font-size: 1rem;
   line-height: 1.35;
@@ -75,6 +76,7 @@ button:focus-visible {
   font-size: 0.8125rem;
 }
 
+.trust-totals-summary .text-base,
 .trust-totals-summary .text-lg {
   font-size: 1rem;
   line-height: 1.35;

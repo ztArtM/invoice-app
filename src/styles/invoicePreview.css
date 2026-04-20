@@ -27,9 +27,14 @@
   overflow-wrap: anywhere;
 }
 
+/* Extra air below header band so the first data row clears Beskrivelse / column titles */
+#invoice-preview .invoice-table-print tbody tr:first-child > td {
+  padding-top: 0.85rem;
+}
+
 @media print {
   @page {
-    margin: 10mm 12mm;
+    margin: 8mm 10mm;
   }
 
   #invoice-preview thead {

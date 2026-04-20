@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseTallyFormRef } from './tallyFeedback'
+import { isAllowedTallyUrl, parseTallyFormRef } from './tallyFeedback'
 
 describe('parseTallyFormRef', () => {
   it('extracts id from /r/ share URL', () => {
@@ -18,5 +18,17 @@ describe('parseTallyFormRef', () => {
     expect(parseTallyFormRef('')).toBeNull()
     expect(parseTallyFormRef(undefined)).toBeNull()
     expect(parseTallyFormRef('   ')).toBeNull()
+  })
+})
+
+describe('isAllowedTallyUrl', () => {
+  it('allows https tally.so embed URLs', () => {
+    expect(isAllowedTallyUrl('https://tally.so/embed/abc')).toBe(true)
+  })
+
+  it('rejects non-https and other hosts', () => {
+    expect(isAllowedTallyUrl('http://tally.so/embed/x')).toBe(false)
+    expect(isAllowedTallyUrl('https://evil.com/embed/x')).toBe(false)
+    expect(isAllowedTallyUrl('not a url')).toBe(false)
   })
 })

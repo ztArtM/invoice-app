@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from 'react'
+import { isAllowedTallyUrl } from '../../utils/tallyFeedback'
 
 export interface FeedbackModalCopy {
   dialogTitle: string
@@ -49,6 +50,9 @@ export function FeedbackModal({ open, onClose, embedUrl, shareUrl, t }: Feedback
 
   if (!open) return null
 
+  const safeEmbed = embedUrl && isAllowedTallyUrl(embedUrl) ? embedUrl : null
+  const safeShare = shareUrl && isAllowedTallyUrl(shareUrl) ? shareUrl : null
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4 print:hidden"
@@ -71,9 +75,9 @@ export function FeedbackModal({ open, onClose, embedUrl, shareUrl, t }: Feedback
             {t.dialogTitle}
           </h2>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            {embedUrl && shareUrl ? (
+            {safeEmbed && safeShare ? (
               <a
-                href={shareUrl}
+                href={safeShare}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-brand-700 underline-offset-2 hover:underline"
@@ -93,11 +97,11 @@ export function FeedbackModal({ open, onClose, embedUrl, shareUrl, t }: Feedback
         </div>
 
         <div className="min-h-0 flex-1 overflow-hidden">
-          {embedUrl ? (
+          {safeEmbed ? (
             <iframe
-              key={embedUrl}
+              key={safeEmbed}
               title={t.iframeTitle}
-              src={embedUrl}
+              src={safeEmbed}
               className="h-[min(78dvh,720px)] w-full border-0 bg-white sm:h-[min(72dvh,680px)]"
               loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"

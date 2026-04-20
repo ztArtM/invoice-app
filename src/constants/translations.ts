@@ -764,7 +764,7 @@ export const translations = {
     },
     totals: {
       ariaLabel: 'Sumoversigt',
-      heading: 'Summer',
+      heading: 'Oversigt',
       subtotalExVat: 'Subtotal (ekskl. moms)',
       vatWithPercent: 'Moms ({{percent}}%)',
       totalDue: 'At betale i alt',

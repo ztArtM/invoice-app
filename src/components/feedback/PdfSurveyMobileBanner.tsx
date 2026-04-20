@@ -1,3 +1,4 @@
+import { isAllowedTallyUrl } from '../../utils/tallyFeedback'
 import { primaryButtonClassName, tertiaryButtonClassName } from '../invoice/buttonStyles'
 
 export interface PdfSurveyMobileBannerCopy {
@@ -18,6 +19,7 @@ interface PdfSurveyMobileBannerProps {
  */
 export function PdfSurveyMobileBanner({ shareUrl, onDismiss, t }: PdfSurveyMobileBannerProps) {
   const openSurvey = () => {
+    if (!isAllowedTallyUrl(shareUrl)) return
     window.open(shareUrl, '_blank', 'noopener,noreferrer')
     onDismiss()
   }

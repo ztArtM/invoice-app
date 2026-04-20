@@ -45,7 +45,7 @@ export function TotalsSummary({
 
   const sectionClassNames = [
     variant === 'preview'
-      ? 'min-w-0 rounded-lg border-2 border-zinc-200 bg-zinc-50 px-5 py-5 sm:px-6 print:border-zinc-400 print:bg-white'
+      ? 'min-w-0 rounded-xl border-2 border-zinc-300/90 bg-zinc-50 px-3 py-3 sm:px-4 print:border-zinc-400 print:bg-white'
       : variant === 'nested'
         ? 'rounded-lg border border-zinc-200/80 bg-white px-4 py-4'
         : 'rounded-xl border border-zinc-200 bg-zinc-50/90 px-4 py-4 shadow-inner shadow-zinc-900/5',
@@ -56,18 +56,18 @@ export function TotalsSummary({
 
   const headingClass =
     variant === 'preview'
-      ? 'text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-zinc-500'
+      ? 'text-[0.65rem] font-semibold tracking-wide text-zinc-500'
       : 'text-xs font-semibold uppercase tracking-wide text-zinc-500'
 
   const grandRowClass =
     variant === 'preview'
-      ? 'flex justify-between gap-4 border-t-2 border-zinc-900/10 pt-4 text-lg font-bold tracking-tight text-zinc-900 print:border-zinc-300'
+      ? 'flex justify-between gap-3 border-t-2 border-zinc-900/20 bg-zinc-100/80 px-2 py-2 -mx-1 text-base font-bold tracking-tight text-zinc-900 print:border-zinc-400 print:bg-zinc-50'
       : 'flex justify-between gap-4 border-t border-zinc-200/80 pt-3 text-base font-semibold text-zinc-900'
 
   return (
     <section aria-label={t.totals.ariaLabel} className={sectionClassNames}>
       <h3 className={headingClass}>{t.totals.heading}</h3>
-      <dl className={variant === 'preview' ? 'mt-5 space-y-3 text-sm' : 'mt-4 space-y-2.5 text-sm'}>
+      <dl className={variant === 'preview' ? 'mt-2 space-y-1.5 text-sm' : 'mt-4 space-y-2.5 text-sm'}>
         {variant === 'preview' ? (
           <>
             <div className="flex min-w-0 items-start justify-between gap-3 text-zinc-600">

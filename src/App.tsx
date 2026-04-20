@@ -24,9 +24,7 @@ import {
   buildTallyPdfDownloadEmbedUrl,
   buildTallyPdfDownloadShareUrl,
 } from './utils/tallyFeedback'
-import type { InfoRoute } from './utils/infoRoutes'
-import { LegalPageShell } from './components/legal/LegalPageShell'
-import { ContactContent, CookiesContent, PrivacyPolicyContent, TermsContent } from './components/legal/LegalPages'
+import { LegalRouteView } from './components/legal/LegalRouteView'
 import { FakturaSkabelonPage } from './components/seo/FakturaSkabelonPage'
 import { FakturaTilFreelancerPage } from './components/seo/FakturaTilFreelancerPage'
 import { GratisFakturaSkabelonPage } from './components/seo/GratisFakturaSkabelonPage'
@@ -63,66 +61,6 @@ function prefersPdfSurveyMobileUi(): boolean {
   )
 }
 
-function LegalRouteView({
-  route,
-  t,
-  onClearLocalData,
-}: {
-  route: InfoRoute
-  t: (typeof translations)[Language]
-  onClearLocalData: () => void
-}) {
-  const navigate = useNavigate()
-  const onBack = () => navigate('/')
-
-  if (route === 'privacy') {
-    return (
-      <LegalPageShell
-        t={t}
-        title={t.legal.privacy.pageTitle}
-        subtitle={t.legal.privacy.pageSubtitle}
-        onBack={onBack}
-      >
-        <PrivacyPolicyContent t={t} />
-      </LegalPageShell>
-    )
-  }
-  if (route === 'terms') {
-    return (
-      <LegalPageShell
-        t={t}
-        title={t.legal.terms.pageTitle}
-        subtitle={t.legal.terms.pageSubtitle}
-        onBack={onBack}
-      >
-        <TermsContent t={t} />
-      </LegalPageShell>
-    )
-  }
-  if (route === 'contact') {
-    return (
-      <LegalPageShell
-        t={t}
-        title={t.legal.contact.pageTitle}
-        subtitle={t.legal.contact.pageSubtitle}
-        onBack={onBack}
-      >
-        <ContactContent t={t} onClearLocalData={onClearLocalData} />
-      </LegalPageShell>
-    )
-  }
-  return (
-    <LegalPageShell
-      t={t}
-      title={t.legal.cookies.pageTitle}
-      subtitle={t.legal.cookies.pageSubtitle}
-      onBack={onBack}
-    >
-      <CookiesContent t={t} />
-    </LegalPageShell>
-  )
-}
-
 /**
  * Single source of truth: invoice state + global UI (language, feedback).
  */
@@ -130,6 +68,7 @@ function App() {
   const navigate = useNavigate()
   const location = useLocation()
   const [language, setLanguage] = useState<Language>('da')
+  const [pdfSurveyBannerShareUrl, setPdfSurveyBannerShareUrl] = useState<string | null>(null)
   const t = translations[language]
 
   useEffect(() => {
@@ -174,7 +113,6 @@ function App() {
     embed: string | null
     share: string | null
   } | null>(null)
-  const [pdfSurveyBannerShareUrl, setPdfSurveyBannerShareUrl] = useState<string | null>(null)
   const pdfSurveyDesktopTimeoutRef = useRef<number | null>(null)
   const activeCurrencyCode = normalizeToSupportedCurrencyCode(invoiceDocument.currency.code)
 
