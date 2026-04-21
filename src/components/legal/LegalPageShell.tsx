@@ -49,21 +49,21 @@ export function LegalPageShell({
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
-        <header className="mb-8 space-y-2">
+      <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-6 sm:py-12">
+        <header className="mx-auto mb-8 max-w-prose space-y-3">
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">{title}</h1>
-          {subtitle ? <p className="text-sm leading-relaxed text-zinc-600">{subtitle}</p> : null}
+          {subtitle ? <p className="text-base leading-relaxed text-zinc-600">{subtitle}</p> : null}
           {articleFreshnessNote ? (
-            <p className="text-sm leading-relaxed text-zinc-500">{articleFreshnessNote}</p>
+            <p className="text-base leading-relaxed text-zinc-500">{articleFreshnessNote}</p>
           ) : null}
           {showLastUpdated ? (
-            <p className="text-xs text-zinc-400">
+            <p className="text-sm text-zinc-500">
               {t.legal.lastUpdated} {appMeta.effectiveDate}
             </p>
           ) : null}
         </header>
 
-        <article className="prose prose-zinc max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-brand-800 prose-a:underline-offset-4">
+        <article className="prose prose-zinc prose-lg sm:prose-xl mx-auto w-full max-w-prose prose-p:leading-relaxed prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-brand-800 prose-a:underline-offset-4 prose-h2:mt-12 prose-h3:mt-8">
           {children}
         </article>
       </main>

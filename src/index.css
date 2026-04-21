@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 /* Include root index.html so utility classes used in static SEO prerender are generated */
 @source '../index.html';
