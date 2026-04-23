@@ -1,9 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { getLocaleForLanguage, normalizeToSupportedCurrencyCode } from '../src/constants/localization'
-import { translations, type Language } from '../src/constants/translations'
-import type { InvoiceDocument } from '../src/types/invoiceDocument'
-import type { InvoicePdfDownloadErrorBody, InvoicePdfDownloadRequest } from '../src/types/invoicePdfDownload'
-import { renderInvoicePdfBytes } from '../src/utils/pdf/buildInvoicePdfDocument'
+import { getLocaleForLanguage, normalizeToSupportedCurrencyCode } from './_shared/localization'
+import type { InvoiceDocument, Language } from './_shared/invoiceTypes'
+import { pdfMessagesForLanguage } from './_shared/messages'
+import { renderInvoicePdfBytes } from './_shared/pdf/renderInvoicePdfBytes'
 
 function isString(value: unknown): value is string {
   return typeof value === 'string'
@@ -18,7 +17,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
 }
 
 function badRequest(res: VercelResponse, message: string) {
-  const body: InvoicePdfDownloadErrorBody = { error: 'invalid_payload', message }
+  const body = { error: 'invalid_payload', message }
   res.status(400).setHeader('Content-Type', 'application/json; charset=utf-8')
   res.setHeader('Cache-Control', 'no-store')
   res.end(JSON.stringify(body))
@@ -92,16 +91,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   const activeCurrencyCode = normalizeToSupportedCurrencyCode(activeCurrencyCodeRaw)
 
-  const invoiceDocument = (raw as InvoicePdfDownloadRequest).invoiceDocument
+  const invoiceDocument = (raw as { invoiceDocument?: unknown }).invoiceDocument
   if (!isInvoiceDocumentLike(invoiceDocument)) {
     badRequest(res, 'Invalid invoice payload.')
     return
   }
 
   try {
-    const t = translations[language as Language]
     const localeForFormatting = getLocaleForLanguage(language as Language)
-    const { bytes, fileName } = renderInvoicePdfBytes(invoiceDocument, t, localeForFormatting, activeCurrencyCode)
+    const t = pdfMessagesForLanguage(language as Language)
+    const { bytes, fileName } = renderInvoicePdfBytes({
+      invoiceDocument,
+      t,
+      localeForFormatting,
+      activeCurrencyCode,
+    })
 
     res.status(200)
     res.setHeader('Content-Type', 'application/pdf')
@@ -110,10 +114,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('X-Content-Type-Options', 'nosniff')
     res.end(Buffer.from(bytes))
   } catch {
-    const body: InvoicePdfDownloadErrorBody = {
-      error: 'server_error',
-      message: translations[language as Language].pdf.couldNotCreate,
-    }
+    const body = { error: 'server_error', message: pdfMessagesForLanguage(language as Language).pdf.couldNotCreate }
     res.status(500).setHeader('Content-Type', 'application/json; charset=utf-8')
     res.setHeader('Cache-Control', 'no-store')
     res.end(JSON.stringify(body))
