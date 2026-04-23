@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { getLocaleForLanguage, normalizeToSupportedCurrencyCode } from './_shared/localization'
-import type { InvoiceDocument, Language } from './_shared/invoiceTypes'
-import { pdfMessagesForLanguage } from './_shared/messages'
-import { renderInvoicePdfBytes } from './_shared/pdf/renderInvoicePdfBytes'
+import { getLocaleForLanguage, normalizeToSupportedCurrencyCode } from './_shared/localization.js'
+import type { InvoiceDocument, Language } from './_shared/invoiceTypes.js'
+import { pdfMessagesForLanguage } from './_shared/messages.js'
+import { renderInvoicePdfBytes } from './_shared/pdf/renderInvoicePdfBytes.js'
 
 function isString(value: unknown): value is string {
   return typeof value === 'string'

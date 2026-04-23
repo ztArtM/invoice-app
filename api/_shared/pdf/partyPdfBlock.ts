@@ -1,6 +1,6 @@
 import type jsPDF from 'jspdf'
-import type { ClientParty, InvoiceDocument, PartyContact, SellerParty } from '../invoiceTypes'
-import { BODY_LINE_H_MM, PARTY_BLOCK_GAP_MM, PARTY_NAME_LINE_H_MM, PT, pdfSplitLines } from './invoicePdfConstants'
+import type { ClientParty, InvoiceDocument, PartyContact, SellerParty } from '../invoiceTypes.js'
+import { BODY_LINE_H_MM, PARTY_BLOCK_GAP_MM, PARTY_NAME_LINE_H_MM, PT, pdfSplitLines } from './invoicePdfConstants.js'
 
 function buildContactLines(party: PartyContact): string[] {
   const lines: string[] = []

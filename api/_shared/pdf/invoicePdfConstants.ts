@@ -1,5 +1,5 @@
 import type jsPDF from 'jspdf'
-import type { InvoiceDocument } from '../invoiceTypes'
+import type { InvoiceDocument } from '../invoiceTypes.js'
 
 export const PAGE_MARGIN_MM = 10
 

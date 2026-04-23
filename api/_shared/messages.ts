@@ -1,4 +1,4 @@
-import type { Language } from './invoiceTypes'
+import type { Language } from './invoiceTypes.js'
 
 export type PdfMessages = {
   preview: {

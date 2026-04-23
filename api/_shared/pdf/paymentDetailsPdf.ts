@@ -1,11 +1,11 @@
 import type jsPDF from 'jspdf'
-import type { InvoiceDocument } from '../invoiceTypes'
+import type { InvoiceDocument } from '../invoiceTypes.js'
 import {
   PAGE_MARGIN_MM,
   PAYMENT_FIELD_GAP_MM,
   PAYMENT_FIELD_LINE_STEP_MM,
   PT,
-} from './invoicePdfConstants'
+} from './invoicePdfConstants.js'
 
 export function hasPaymentDetails(payment: InvoiceDocument['paymentDetails']): boolean {
   return (

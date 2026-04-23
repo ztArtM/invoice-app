@@ -1,4 +1,4 @@
-import type { LineItem } from './invoiceTypes'
+import type { LineItem } from './invoiceTypes.js'
 
 export function calculateLineItemTotal(lineItem: LineItem): number {
   return lineItem.quantity * lineItem.unitPrice

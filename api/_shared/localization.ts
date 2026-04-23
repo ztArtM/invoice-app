@@ -1,4 +1,4 @@
-import type { Language, SupportedCurrencyCode } from './invoiceTypes'
+import type { Language, SupportedCurrencyCode } from './invoiceTypes.js'
 
 export function getLocaleForLanguage(language: Language): string {
   return language === 'da' ? 'da-DK' : 'en-GB'

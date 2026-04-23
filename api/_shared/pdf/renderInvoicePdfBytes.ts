@@ -1,10 +1,10 @@
 import { jsPDF } from 'jspdf'
-import type { SupportedCurrencyCode } from '../invoiceTypes'
-import type { PdfMessages } from '../messages'
-import type { InvoiceDocument } from '../invoiceTypes'
-import { formatCurrencyAmount } from '../formatCurrency'
-import { formatDateForDisplay } from '../formatDate'
-import { calculateInvoiceTotalsSummary, calculateLineItemTotal } from '../invoiceCalculations'
+import type { SupportedCurrencyCode } from '../invoiceTypes.js'
+import type { PdfMessages } from '../messages.js'
+import type { InvoiceDocument } from '../invoiceTypes.js'
+import { formatCurrencyAmount } from '../formatCurrency.js'
+import { formatDateForDisplay } from '../formatDate.js'
+import { calculateInvoiceTotalsSummary, calculateLineItemTotal } from '../invoiceCalculations.js'
 import {
   BODY_LINE_H_MM,
   LINE_ITEMS_SECTION_PT,
@@ -18,9 +18,9 @@ import {
   TABLE_ROW_PAD_MM,
   buildPdfFileName,
   pdfSplitLines,
-} from './invoicePdfConstants'
-import { buildClientPdfBlock, buildSellerPdfBlock, drawPartyPdfBlock, measurePartyPdfBlockHeight } from './partyPdfBlock'
-import { hasPaymentDetails, type PaymentPdfPair, writePaymentTwoColumnRows } from './paymentDetailsPdf'
+} from './invoicePdfConstants.js'
+import { buildClientPdfBlock, buildSellerPdfBlock, drawPartyPdfBlock, measurePartyPdfBlockHeight } from './partyPdfBlock.js'
+import { hasPaymentDetails, type PaymentPdfPair, writePaymentTwoColumnRows } from './paymentDetailsPdf.js'
 
 const COL_FR_DESC = 0.46
 const COL_FR_QTY = 0.11
