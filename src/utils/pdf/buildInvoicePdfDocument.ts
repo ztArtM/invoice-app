@@ -340,6 +340,11 @@ export function buildInvoicePdfIntoDoc(
     localeForFormatting,
   )
 
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(PT.caption)
+  doc.setTextColor(90, 90, 90)
+  const totalsHeadingLines = pdfSplitLines(doc, tot.heading, totalsBlockW - totPad * 2)
+
   doc.setFontSize(PT.body)
   doc.setFont('helvetica', 'normal')
   const subLabelLines = pdfSplitLines(doc, subtotalLabel, labelMaxW)
@@ -348,18 +353,32 @@ export function buildInvoicePdfIntoDoc(
   const vatAmountLines = pdfSplitLines(doc, vatAmtStr, amountMaxW)
 
   doc.setFont('helvetica', 'bold')
-  doc.setFontSize(PT.body)
+  doc.setFontSize(PT.grand)
   const grandLabelLines = pdfSplitLines(doc, tot.totalDue, labelMaxW)
   const grandAmountLines = pdfSplitLines(doc, grandAmtStr, amountMaxW)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(PT.body)
   doc.setTextColor(0, 0, 0)
 
+  const grandStepMm = BODY_LINE_H_MM * 1.05
+  const totalsCaptionLineMm = BODY_LINE_H_MM * 0.64
+  const totalsHeadingH = totalsHeadingLines.length * totalsCaptionLineMm
   const subRowH = Math.max(subLabelLines.length, subAmountLines.length) * BODY_LINE_H_MM
   const vatRowH = Math.max(vatLabelLines.length, vatAmountLines.length) * BODY_LINE_H_MM
-  const grandRowH = Math.max(grandLabelLines.length, grandAmountLines.length) * BODY_LINE_H_MM
-  let totalsBlockHeightMm = 5 + subRowH + 1.4 + vatRowH + 2.0 + grandRowH + 5
-  totalsBlockHeightMm = Math.max(totalsBlockHeightMm, 26)
+  const grandH = Math.max(grandLabelLines.length, grandAmountLines.length) * grandStepMm
+  const grandBandDrawMm = grandH + 3.8
+  let totalsBlockHeightMm =
+    4.5 +
+    totalsHeadingH +
+    1.2 +
+    subRowH +
+    0.35 +
+    vatRowH +
+    1.5 +
+    2.2 +
+    grandBandDrawMm +
+    1.5
+  totalsBlockHeightMm = Math.max(totalsBlockHeightMm, 32) + 2
 
   ensureRoomForBlock(totalsBlockHeightMm)
   const totalsBoxTop = cursorYMm
@@ -367,7 +386,16 @@ export function buildInvoicePdfIntoDoc(
   doc.setDrawColor(212, 212, 216)
   doc.roundedRect(totalsBlockLeftMm, totalsBoxTop, totalsBlockW, totalsBlockHeightMm, 2, 2, 'FD')
 
-  let totY = totalsBoxTop + 5.0
+  let totY = totalsBoxTop + 4.5
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(PT.caption)
+  doc.setTextColor(90, 90, 90)
+  for (const line of totalsHeadingLines) {
+    doc.text(line, totalsBlockLeftMm + totPad, totY)
+    totY += totalsCaptionLineMm
+  }
+  doc.setTextColor(0, 0, 0)
+  totY += 1.2
 
   function drawTotalsRowPair(
     labelLines: string[],
@@ -398,20 +426,35 @@ export function buildInvoicePdfIntoDoc(
   }
 
   drawTotalsRowPair(subLabelLines, subAmountLines, true, BODY_LINE_H_MM)
-  totY += 0.2
+  totY += 0.35
   drawTotalsRowPair(vatLabelLines, vatAmountLines, true, BODY_LINE_H_MM)
-  totY += 1.3
+  totY += 1.5
 
-  doc.setDrawColor(228, 228, 231)
+  doc.setDrawColor(190, 190, 195)
   doc.setLineWidth(0.35)
   doc.line(totalsBlockLeftMm + totPad, totY, totalsBlockRightMm - totPad, totY)
   doc.setLineWidth(0.2)
-  totY += 2.0
+  totY += 2.2
+
+  const grandTop = totY
+  const grandBandH = Math.max(grandLabelLines.length, grandAmountLines.length) * grandStepMm + 3.8
+  doc.setFillColor(241, 241, 243)
+  doc.roundedRect(totalsBlockLeftMm + totPad, grandTop - 1.5, totalsBlockW - totPad * 2, grandBandH, 1.2, 1.2, 'F')
 
   doc.setFont('helvetica', 'bold')
-  doc.setFontSize(PT.body)
+  doc.setFontSize(PT.grand)
   doc.setTextColor(24, 24, 27)
-  drawTotalsRowPair(grandLabelLines, grandAmountLines, false, BODY_LINE_H_MM)
+  let yGrandL = grandTop + 2.2
+  for (const part of grandLabelLines) {
+    doc.text(part, totalsBlockLeftMm + totPad + 2, yGrandL)
+    yGrandL += grandStepMm
+  }
+  let yGrandR = grandTop + 2.2
+  for (const part of grandAmountLines) {
+    doc.text(part, totalsBlockRightMm - totPad - 2, yGrandR, { align: 'right' })
+    yGrandR += grandStepMm
+  }
+  totY = Math.max(yGrandL, yGrandR) + 1.2
 
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(PT.body)
@@ -502,8 +545,7 @@ export function buildInvoicePdfIntoDoc(
     ensureRoomForBlock(cardH)
     const cardTop = cursorYMm
     doc.setFillColor(250, 250, 251)
-    doc.setDrawColor(212, 212, 216)
-    doc.roundedRect(cardX, cardTop, cardW, cardH, 2, 2, 'FD')
+    doc.roundedRect(cardX, cardTop, cardW, cardH, 2, 2, 'F')
 
     let y = cardTop + pad
 
