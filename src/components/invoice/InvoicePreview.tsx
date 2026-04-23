@@ -53,12 +53,12 @@ export function InvoicePreview({
     >
       {/* Document title + compact metadata (number, dates, currency) */}
       <header className="border-b border-zinc-900/15 pb-3 print:border-zinc-400">
-        <div className="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
+        <div className="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-6 print:flex-row print:items-start print:justify-between print:gap-6">
           <div className="min-w-0 shrink-0">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-900">{documentTitle}</p>
           </div>
 
-          <dl className="grid min-w-0 w-full max-w-[19rem] shrink-0 grid-cols-[minmax(0,7rem)_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm shadow-zinc-900/[0.03] print:border-zinc-300 print:shadow-none">
+          <dl className="grid min-w-0 w-full max-w-[19rem] shrink-0 grid-cols-[minmax(0,7rem)_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm shadow-sm shadow-zinc-900/[0.03] print:ml-auto print:w-auto print:max-w-[17rem] print:border-zinc-300 print:shadow-none">
             <dt className="min-w-0 text-[0.7rem] font-medium text-zinc-500 [overflow-wrap:anywhere]">{numberLabel}</dt>
             <dd className="min-w-0 text-right text-base font-bold tabular-nums text-zinc-900 [overflow-wrap:anywhere]">
               {invoiceDocument.invoiceNumber.trim() ? (

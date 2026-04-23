@@ -29,8 +29,8 @@ export function writePaymentTwoColumnRows(
   contentWidthMm: number,
   pairs: PaymentPdfPair[],
 ): number {
-  const labelColWMm = Math.min(52, contentWidthMm * 0.34)
-  const colGapMm = 6
+  const labelColWMm = Math.min(48, contentWidthMm * 0.32)
+  const colGapMm = 5
   const valueXMm = marginLeftMm + labelColWMm + colGapMm
   const valueMaxWMm = Math.max(24, marginLeftMm + contentWidthMm - valueXMm)
 

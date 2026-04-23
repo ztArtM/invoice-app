@@ -192,9 +192,9 @@ export function InvoiceWorkspace({
 
       <main
         id="invoice-app-main"
-        className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-x-12 lg:gap-y-10"
+        className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-x-12 lg:gap-y-10 print:block print:gap-0"
       >
-        <div className="min-w-0 space-y-3">
+        <div className="min-w-0 space-y-3 print:hidden">
           <p className="hidden text-xs font-semibold uppercase tracking-wider text-zinc-400 lg:block">
             {t.workspace.editorColumnLabel}
           </p>

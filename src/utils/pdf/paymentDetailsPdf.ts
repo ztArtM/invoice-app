@@ -28,8 +28,8 @@ export function writePaymentTwoColumnRows(
   pairs: PaymentPdfPair[],
 ): number {
   /** Match preview `minmax(8.5rem,12rem)` + `gap-x-6` */
-  const labelColWMm = Math.min(52, contentWidthMm * 0.34)
-  const colGapMm = 6
+  const labelColWMm = Math.min(48, contentWidthMm * 0.32)
+  const colGapMm = 5
   const valueXMm = marginLeftMm + labelColWMm + colGapMm
   const valueMaxWMm = Math.max(24, marginLeftMm + contentWidthMm - valueXMm)
 
