@@ -76,10 +76,10 @@ export function InvoiceWorkspace({
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [mobilePreviewOpen])
 
-  const handleDownloadPdfClick = () => {
+  const handleDownloadPdfClick = async () => {
     setPdfErrorMessage(null)
     try {
-      exportInvoiceToPdf(invoiceDocument, t, localeForFormatting, activeCurrencyCode)
+      await exportInvoiceToPdf(invoiceDocument, t, language, localeForFormatting, activeCurrencyCode)
       onFeedbackClick?.()
     } catch (error) {
       const message =

@@ -405,6 +405,7 @@ export const translations = {
     pdf: {
       couldNotCreate:
         'Could not create the PDF. Check that downloads are allowed, or use Print and choose “Save as PDF”.',
+      tooManyDownloads: 'Too many download attempts. Please try again shortly.',
       issueDatePrefix: 'Issue date:',
       currencyPrefix: 'Currency:',
       emptyDash: '—',
@@ -810,6 +811,7 @@ export const translations = {
     pdf: {
       couldNotCreate:
         'Kunne ikke oprette PDF. Tjek at downloads er tilladt, eller brug Udskriv og vælg „Gem som PDF“.',
+      tooManyDownloads: 'For mange downloadforsøg. Prøv igen om lidt.',
       issueDatePrefix: 'Dato:',
       currencyPrefix: 'Valuta:',
       emptyDash: '—',

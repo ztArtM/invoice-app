@@ -39,13 +39,17 @@ const COL_FR_DESC = 0.46
 const COL_FR_QTY = 0.11
 const COL_FR_UNIT = 0.21
 
-export function buildInvoicePdfDocument(
+/**
+ * Draws the invoice into the provided jsPDF document. Kept separate so the same layout can be used
+ * in the browser (legacy) and in Vercel serverless functions (protected download endpoint).
+ */
+export function buildInvoicePdfIntoDoc(
+  doc: jsPDF,
   invoiceDocument: InvoiceDocument,
   t: TranslationMessages,
   localeForFormatting: string,
   activeCurrencyCode: SupportedCurrencyCode,
-): void {
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+): { fileName: string } {
   const pageWidthMm = doc.internal.pageSize.getWidth()
   const pageHeightMm = doc.internal.pageSize.getHeight()
   const contentRightMm = pageWidthMm - PAGE_MARGIN_MM
@@ -546,5 +550,36 @@ export function buildInvoicePdfDocument(
     moveDown(4)
   }
 
-  doc.save(buildPdfFileName(invoiceDocument))
+  return { fileName: buildPdfFileName(invoiceDocument) }
+}
+
+/**
+ * Renders the invoice as PDF bytes (Uint8Array) and a suggested filename.
+ * This is the preferred primitive for server-side downloads.
+ */
+export function renderInvoicePdfBytes(
+  invoiceDocument: InvoiceDocument,
+  t: TranslationMessages,
+  localeForFormatting: string,
+  activeCurrencyCode: SupportedCurrencyCode,
+): { bytes: Uint8Array; fileName: string } {
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+  const { fileName } = buildInvoicePdfIntoDoc(doc, invoiceDocument, t, localeForFormatting, activeCurrencyCode)
+  const arrayBuffer = doc.output('arraybuffer') as ArrayBuffer
+  return { bytes: new Uint8Array(arrayBuffer), fileName }
+}
+
+/**
+ * Browser-only legacy entry: renders and immediately downloads.
+ * Prefer calling the protected Vercel endpoint instead.
+ */
+export function buildInvoicePdfDocument(
+  invoiceDocument: InvoiceDocument,
+  t: TranslationMessages,
+  localeForFormatting: string,
+  activeCurrencyCode: SupportedCurrencyCode,
+): void {
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+  const { fileName } = buildInvoicePdfIntoDoc(doc, invoiceDocument, t, localeForFormatting, activeCurrencyCode)
+  doc.save(fileName)
 }

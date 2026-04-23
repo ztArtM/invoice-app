@@ -52,9 +52,11 @@ export function LegalPageShell({
       <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-6 sm:py-12">
         <header className="mx-auto mb-8 max-w-prose space-y-3">
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">{title}</h1>
-          {subtitle ? <p className="text-base leading-relaxed text-zinc-600">{subtitle}</p> : null}
+          {subtitle ? (
+            <p className="text-[70%] leading-relaxed text-zinc-600 sm:text-[75%]">{subtitle}</p>
+          ) : null}
           {articleFreshnessNote ? (
-            <p className="text-base leading-relaxed text-zinc-500">{articleFreshnessNote}</p>
+            <p className="text-[70%] leading-relaxed text-zinc-500 sm:text-[75%]">{articleFreshnessNote}</p>
           ) : null}
           {showLastUpdated ? (
             <p className="text-sm text-zinc-500">
@@ -63,7 +65,7 @@ export function LegalPageShell({
           ) : null}
         </header>
 
-        <article className="prose prose-zinc prose-lg sm:prose-xl mx-auto w-full max-w-prose prose-p:leading-relaxed prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-brand-800 prose-a:underline-offset-4 prose-h2:mt-12 prose-h3:mt-8">
+        <article className="prose prose-zinc prose-lg sm:prose-xl mx-auto w-full max-w-prose prose-p:leading-relaxed prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-brand-800 prose-a:underline-offset-4 prose-h2:mt-12 prose-h3:mt-8 prose-h2:text-[1.3125rem] prose-h2:leading-snug sm:prose-h2:text-[1.4rem] prose-h3:text-[1.0625rem] prose-h3:leading-snug sm:prose-h3:text-[1.125rem]">
           {children}
         </article>
       </main>

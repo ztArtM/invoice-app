@@ -1,21 +1,21 @@
 import type { SupportedCurrencyCode } from '../../constants/localization'
-import type { TranslationMessages } from '../../constants/translations'
+import type { Language, TranslationMessages } from '../../constants/translations'
 import type { InvoiceDocument } from '../../types/invoiceDocument'
-import { buildInvoicePdfDocument } from './buildInvoicePdfDocument'
+import { downloadInvoicePdfFromApi } from '../downloadInvoicePdf'
 
 /**
- * Builds and downloads a professional A4 PDF from the same data as `#invoice-preview`.
- * @throws Error with `t.pdf.couldNotCreate` if jsPDF fails or the download is blocked.
+ * Downloads the PDF via the protected Vercel API route (preferred for production).
+ * @throws Error with a user-facing message (rate-limited, invalid payload, generic failure).
  */
-export function exportInvoiceToPdf(
+export async function exportInvoiceToPdf(
   invoiceDocument: InvoiceDocument,
   t: TranslationMessages,
+  language: Language,
   localeForFormatting: string,
   activeCurrencyCode: SupportedCurrencyCode,
-): void {
-  try {
-    buildInvoicePdfDocument(invoiceDocument, t, localeForFormatting, activeCurrencyCode)
-  } catch {
-    throw new Error(t.pdf.couldNotCreate)
-  }
+): Promise<void> {
+  // `localeForFormatting` is still used by the UI and stays part of the signature,
+  // but the protected route derives locale from `language` to prevent mismatches.
+  void localeForFormatting
+  await downloadInvoicePdfFromApi({ invoiceDocument, language, activeCurrencyCode, t })
 }
