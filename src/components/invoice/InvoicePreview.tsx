@@ -140,20 +140,17 @@ export function InvoicePreview({
         </PreviewPartyPanel>
       </div>
 
-      {/* Line items */}
+      {/* Line items (table header already communicates context; keep preview compact) */}
       <section className="mt-5 min-w-0" aria-label={p.lineItemsHeading}>
-        <h3 className="text-[0.7rem] font-semibold tracking-wide text-zinc-500">{p.lineItemsHeading}</h3>
-        <div className="mt-3">
-          <PreviewLineItems
-            lineItems={invoiceDocument.lineItems}
-            thDescription={p.thDescription}
-            thQty={p.thQty}
-            thUnitPrice={p.thUnitPrice}
-            thAmount={p.thAmount}
-            activeCurrencyCode={activeCurrencyCode}
-            localeForFormatting={localeForFormatting}
-          />
-        </div>
+        <PreviewLineItems
+          lineItems={invoiceDocument.lineItems}
+          thDescription={p.thDescription}
+          thQty={p.thQty}
+          thUnitPrice={p.thUnitPrice}
+          thAmount={p.thAmount}
+          activeCurrencyCode={activeCurrencyCode}
+          localeForFormatting={localeForFormatting}
+        />
       </section>
 
       {/* Totals — isolated summary */}

@@ -7,7 +7,6 @@ import { formatDateForDisplay } from '../formatDate.js'
 import { calculateInvoiceTotalsSummary, calculateLineItemTotal } from '../invoiceCalculations.js'
 import {
   BODY_LINE_H_MM,
-  LINE_ITEMS_SECTION_PT,
   META_ROW_STEP_MM,
   PAGE_MARGIN_MM,
   PT,
@@ -45,7 +44,6 @@ export function renderInvoicePdfBytes(props: {
   const totals = calculateInvoiceTotalsSummary(invoiceDocument.lineItems, invoiceDocument.vat.ratePercent)
 
   const p = t.preview
-  const li = t.lineItems
   const tot = t.totals
 
   const isQuote = invoiceDocument.documentKind === 'quote'
@@ -211,13 +209,8 @@ export function renderInvoicePdfBytes(props: {
     moveDown(SECTION_TOP_MARGIN_MM * 0.6)
   }
 
-  // Line items
+  // Line items (table header provides context; keep compact to match preview)
   ensureRoomForBlock(15)
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(LINE_ITEMS_SECTION_PT)
-  doc.setTextColor(82, 82, 91)
-  doc.text(li.heading, PAGE_MARGIN_MM, cursorYMm)
-  moveDown(3.2)
 
   const tablePadX = 2
   const tableLeft = PAGE_MARGIN_MM
@@ -440,7 +433,7 @@ export function renderInvoicePdfBytes(props: {
     doc.setFontSize(PT.caption)
     doc.setTextColor(161, 161, 170)
     doc.text(p.notes, PAGE_MARGIN_MM, cursorYMm)
-    moveDown(3.2)
+    moveDown(1.6)
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(PT.body)
     doc.setTextColor(63, 63, 70)
@@ -490,7 +483,7 @@ export function renderInvoicePdfBytes(props: {
     doc.setFontSize(PT.caption)
     doc.setTextColor(82, 82, 91)
     doc.text(p.paymentDetails, PAGE_MARGIN_MM, cursorYMm)
-    moveDown(3.8)
+    moveDown(3.2)
 
     const payPairs: PaymentPdfPair[] = []
     if (payment.bankName.trim() !== '') {

@@ -52,8 +52,8 @@ export const SECTION_TOP_MARGIN_MM = 5
 /** Line items: per-line step ≈ text-sm line height in table cells. */
 export const TABLE_ROW_PAD_MM = 0.5
 
-/** Gap under grey table header → first row (`0.85rem` in `invoicePreview.css`). */
-export const TABLE_HEADER_BODY_GAP_MM = 3.6
+/** Gap under grey table header → first row (tuned to match preview baseline spacing). */
+export const TABLE_HEADER_BODY_GAP_MM = 4.2
 
 /** Space after a row’s last baseline before next row (no row borders in preview). */
 export const TABLE_ROW_BOTTOM_PAD_MM = 0.75

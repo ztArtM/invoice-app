@@ -11,7 +11,6 @@ import {
 import {
   BODY_LINE_H_MM,
   buildPdfFileName,
-  LINE_ITEMS_SECTION_PT,
   META_ROW_STEP_MM,
   PAGE_MARGIN_MM,
   PT,
@@ -234,12 +233,8 @@ export function buildInvoicePdfIntoDoc(
   }
 
   // ----- Line items -----
+  // Keep compact: table header provides context (matches preview).
   ensureRoomForBlock(15)
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(LINE_ITEMS_SECTION_PT)
-  doc.setTextColor(82, 82, 91)
-  doc.text(li.heading, PAGE_MARGIN_MM, cursorYMm)
-  moveDown(3.2)
 
   const tablePadX = 2
   const tableLeft = PAGE_MARGIN_MM
@@ -472,7 +467,7 @@ export function buildInvoicePdfIntoDoc(
     doc.setFontSize(PT.caption)
     doc.setTextColor(161, 161, 170)
     doc.text(p.notes, PAGE_MARGIN_MM, cursorYMm)
-    moveDown(3.2)
+    moveDown(1.6)
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(PT.body)
     doc.setTextColor(63, 63, 70)
@@ -522,7 +517,7 @@ export function buildInvoicePdfIntoDoc(
     doc.setFontSize(PT.caption)
     doc.setTextColor(82, 82, 91)
     doc.text(p.paymentDetails, PAGE_MARGIN_MM, cursorYMm)
-    moveDown(3.8)
+    moveDown(3.2)
 
     const payPairs: PaymentPdfPair[] = []
     if (payment.bankName.trim() !== '') {
