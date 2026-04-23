@@ -439,10 +439,10 @@ export function renderInvoicePdfBytes(props: {
   if (notesTrimmed || mobilePayTrimmed || hasPayment) {
     const cardX = PAGE_MARGIN_MM
     const cardW = contentWidthMm
-    const pad = 3.5
-    const sectionGap = 3.0
-    const headerGapTight = 1.6
-    const headerGapPayment = 2.4
+    const pad = 5.0
+    const sectionGap = 4.5
+    const headerGapTight = 2.2
+    const headerGapPayment = 3.4
 
     const noteLines = notesTrimmed ? doc.splitTextToSize(notesTrimmed, cardW - pad * 2) : []
     const mobileLines = mobilePayTrimmed ? doc.splitTextToSize(mobilePayTrimmed, cardW - pad * 2) : []
