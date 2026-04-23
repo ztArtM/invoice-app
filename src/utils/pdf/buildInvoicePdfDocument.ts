@@ -472,8 +472,9 @@ export function buildInvoicePdfIntoDoc(
     const cardW = contentWidthMm
     const pad = 5.0
     const sectionGap = 4.5
-    const headerGapTight = 2.2
-    const headerGapPayment = 3.4
+    const headerGapTight = 3.8
+    const headerGapPayment = 5.0
+    const headerBaselineFudgeMm = 0.6
 
     const noteLines = notesTrimmed ? doc.splitTextToSize(notesTrimmed, cardW - pad * 2) : []
     const mobileLines = mobilePayTrimmed ? doc.splitTextToSize(mobilePayTrimmed, cardW - pad * 2) : []
@@ -529,17 +530,17 @@ export function buildInvoicePdfIntoDoc(
     let sections = 0
     if (noteLines.length > 0) {
       sections++
-      cardH += headerGapTight + noteLines.length * (BODY_LINE_H_MM * 0.92)
+      cardH += headerGapTight + headerBaselineFudgeMm + noteLines.length * (BODY_LINE_H_MM * 0.92)
     }
     if (mobileLines.length > 0) {
       if (sections > 0) cardH += sectionGap
       sections++
-      cardH += headerGapTight + mobileLines.length * (BODY_LINE_H_MM * 0.92)
+      cardH += headerGapTight + headerBaselineFudgeMm + mobileLines.length * (BODY_LINE_H_MM * 0.92)
     }
     if (payPairs.length > 0) {
       if (sections > 0) cardH += sectionGap
       sections++
-      cardH += headerGapPayment + paymentH
+      cardH += headerGapPayment + headerBaselineFudgeMm + paymentH
     }
 
     ensureRoomForBlock(cardH)
@@ -554,7 +555,7 @@ export function buildInvoicePdfIntoDoc(
       doc.setFontSize(PT.caption)
       doc.setTextColor(161, 161, 170)
       doc.text(p.notes, cardX + pad, y)
-      y += headerGapTight
+      y += headerGapTight + headerBaselineFudgeMm
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(PT.body)
       doc.setTextColor(63, 63, 70)
@@ -571,7 +572,7 @@ export function buildInvoicePdfIntoDoc(
       doc.setFontSize(PT.caption)
       doc.setTextColor(161, 161, 170)
       doc.text(p.mobilePay, cardX + pad, y)
-      y += headerGapTight
+      y += headerGapTight + headerBaselineFudgeMm
       doc.setFont('helvetica', 'bold')
       doc.setFontSize(PT.body)
       doc.setTextColor(39, 39, 42)
@@ -588,7 +589,7 @@ export function buildInvoicePdfIntoDoc(
       doc.setFontSize(PT.caption)
       doc.setTextColor(82, 82, 91)
       doc.text(p.paymentDetails, cardX + pad, y)
-      y += headerGapPayment
+      y += headerGapPayment + headerBaselineFudgeMm
       cursorYMm = writePaymentTwoColumnRows(doc, y, pageHeightMm, cardX + pad, cardW - pad * 2, payPairs)
       y = cursorYMm
     } else {
