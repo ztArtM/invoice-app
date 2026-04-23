@@ -47,6 +47,19 @@
     page-break-inside: avoid;
   }
 
+  /* Footer should be allowed to split to avoid wasting a whole page. */
+  #invoice-preview .invoice-footer,
+  #invoice-preview .invoice-footer section,
+  #invoice-preview .invoice-footer dl {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  /* Payment details often cause the extra page; relax splitting and trim extra bottom padding. */
+  #invoice-preview .invoice-footer-payment {
+    padding-bottom: 0;
+  }
+
   #invoice-preview .invoice-table-print tbody tr {
     break-inside: avoid;
     page-break-inside: avoid;

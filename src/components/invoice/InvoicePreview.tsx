@@ -177,7 +177,7 @@ export function InvoicePreview({
       ) : null}
 
       {/* Notes + MobilePay + payment — one footer band, lighter than totals */}
-      <footer className="mt-5 min-w-0 space-y-3 rounded-xl border border-zinc-200/90 bg-zinc-50/50 p-3 sm:p-4 print:mt-5 print:border-zinc-300 print:bg-white">
+      <footer className="invoice-footer mt-5 min-w-0 space-y-3 rounded-xl border border-zinc-200/90 bg-zinc-50/50 p-3 sm:p-4 print:mt-5 print:border-zinc-300 print:bg-white">
         {notesTrimmed ? (
           <section className="min-w-0" aria-label={p.notes}>
             <h3 className="text-[0.65rem] font-semibold tracking-wide text-zinc-400">{p.notes}</h3>
@@ -200,7 +200,7 @@ export function InvoicePreview({
         ) : null}
 
         <section
-          className={`min-w-0 pb-4 ${notesTrimmed || mobilePayTrimmed ? 'border-t border-zinc-200/90 pt-3 print:border-zinc-200' : ''}`}
+          className={`invoice-footer-payment min-w-0 pb-4 ${notesTrimmed || mobilePayTrimmed ? 'border-t border-zinc-200/90 pt-3 print:border-zinc-200' : ''}`}
           aria-label={p.paymentDetails}
         >
           <h3 className="text-[0.65rem] font-semibold tracking-wide text-zinc-500">{p.paymentDetails}</h3>

@@ -435,12 +435,13 @@ export function buildInvoicePdfIntoDoc(
     const noteLines = notesTrimmed ? doc.splitTextToSize(notesTrimmed, cardW - pad * 2) : []
     const mobileLines = mobilePayTrimmed ? doc.splitTextToSize(mobilePayTrimmed, cardW - pad * 2) : []
 
+    const isDanish = localeForFormatting.toLowerCase().startsWith('da')
     function shortPaymentLabel(fullLabel: string): string {
       // PDF-only short labels; preview keeps the full versions.
-      if (fullLabel === p.registrationNumber) return 'Reg.nr.'
-      if (fullLabel === p.accountNumber) return 'Acct.'
-      if (fullLabel === p.accountHolder) return 'Holder'
-      if (fullLabel === p.paymentRef) return 'Ref.'
+      if (fullLabel === p.registrationNumber) return isDanish ? 'Reg.nr.' : 'Reg. no.'
+      if (fullLabel === p.accountNumber) return isDanish ? 'Kontonr.' : 'Acct.'
+      if (fullLabel === p.accountHolder) return isDanish ? 'Modtager' : 'Holder'
+      if (fullLabel === p.paymentRef) return isDanish ? 'Ref.' : 'Ref.'
       return fullLabel
     }
 
